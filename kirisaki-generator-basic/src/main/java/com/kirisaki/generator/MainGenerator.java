@@ -7,11 +7,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainGenerator {
-    private static void doGenerator(Object data) throws TemplateException, IOException {
+    public static void doGenerator(Object data) throws TemplateException, IOException {
         //生成静态文件
         String property = System.getProperty("user.dir");
         File parent = new File(property).getParentFile();
-        String inptut = parent+ File.separator+"kisirsaki-generator-demo-project/acm-template";
+        String inptut = parent+ File.separator+"kisirsaki-generator.bat-demo-project/acm-template";
         StaticGenerator.copyFilesByRecursive(inptut,property);
         //生成动态文件
         String dynamicInput = property + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
