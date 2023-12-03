@@ -1,6 +1,6 @@
 package com.kirisaki.generator;
 
-import com.kirisaki.model.ConfigTemplate;
+import com.kirisaki.model.MainTemplate;
 import freemarker.template.TemplateException;
 
 import java.io.File;
@@ -11,7 +11,7 @@ public class MainGenerator {
         //生成静态文件
         String property = System.getProperty("user.dir");
         File parent = new File(property).getParentFile();
-        String inptut = parent+ File.separator+"kisirsaki-generator.bat-demo-project/acm-template";
+        String inptut = parent+ File.separator+"kisirsaki-generator-demo-project/acm-template";
         StaticGenerator.copyFilesByRecursive(inptut,property);
         //生成动态文件
         String dynamicInput = property + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
@@ -20,7 +20,7 @@ public class MainGenerator {
         
     }
     public static void main(String[] args) throws TemplateException, IOException {
-        ConfigTemplate configTemplate = new ConfigTemplate();
+        MainTemplate configTemplate = new MainTemplate();
         configTemplate.setAuthor("KK");
         configTemplate.setSummary("KK求和");
         configTemplate.setFlag(false);

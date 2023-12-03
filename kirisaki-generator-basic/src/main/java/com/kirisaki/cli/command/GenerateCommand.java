@@ -2,7 +2,7 @@ package com.kirisaki.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.kirisaki.generator.MainGenerator;
-import com.kirisaki.model.ConfigTemplate;
+import com.kirisaki.model.MainTemplate;
 import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;

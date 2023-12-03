@@ -1,13 +1,17 @@
 package com.kirisaki.generator;
 
-import com.kirisaki.model.ConfigTemplate;
+import com.kirisaki.model.MainTemplate;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * 动态生成
@@ -19,7 +23,7 @@ public class DynamicGenerator {
         String input = new File(property) + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
         String out = new File(property)+File.separator+"MainTemplate.java";
         //数据
-        ConfigTemplate configTemplate = new ConfigTemplate();
+        MainTemplate configTemplate = new MainTemplate();
         configTemplate.setAuthor("kirisaki");
         configTemplate.setFlag(false);
         configTemplate.setSummary("求和结果");
@@ -42,10 +46,13 @@ public class DynamicGenerator {
         cfg.setDefaultEncoding("utf-8");
         cfg.setNumberFormat("0.######");
         String outName = new File(input).getName();
+        //修复生成文件中的乱码问题
         Template template = cfg.getTemplate(outName);
 
         //生成文件
-        FileWriter writer = new FileWriter(out);
+        // FileWriter writer = new FileWriter(out);
+        //修改输出的java文件乱码问题
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(out)), StandardCharsets.UTF_8));
         template.process(data, writer);
         writer.close();
     }
