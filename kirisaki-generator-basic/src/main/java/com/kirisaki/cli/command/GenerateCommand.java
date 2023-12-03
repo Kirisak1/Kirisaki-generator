@@ -24,7 +24,7 @@ public class GenerateCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        ConfigTemplate configTemplate = new ConfigTemplate();
+        MainTemplate configTemplate = new MainTemplate();
         //通过this 将这个类的成员变量赋值给另一个对象
         BeanUtil.copyProperties(this, configTemplate);
         MainGenerator.doGenerator(configTemplate);
