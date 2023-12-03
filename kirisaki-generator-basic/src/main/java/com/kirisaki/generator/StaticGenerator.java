@@ -17,7 +17,7 @@ public class StaticGenerator {
         String curDir = System.getProperty("user.dir");
         String parent = new File(curDir).getParent();
         System.out.println(parent);
-        String src = parent + File.separator + "kisirsaki-generator.bat-demo-project" + File.separator + "acm-template";
+        String src = parent + File.separator + "kisirsaki-generator-demo-project" + File.separator + "acm-template";
         System.out.println(src);
         FileUtil.copy(src, parent, true);
     }
