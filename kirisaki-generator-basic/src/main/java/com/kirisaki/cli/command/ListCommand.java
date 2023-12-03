@@ -23,10 +23,10 @@ public class ListCommand implements Runnable {
         // 获取父目录的绝对路径
         String absolutePath = parentFile.getAbsolutePath();
         // 循环遍历指定路径下的所有文件   通过hutool的工具包来循环文件下的所有路径
-        List<File> files = FileUtil.loopFiles(absolutePath + "/kisirsaki-generator.bat-demo-project/acm-template");
+        List<File> files = FileUtil.loopFiles(absolutePath + "/kisirsaki-generator-demo-project/acm-template");
         // 遍历文件列表并打印每个文件
         for (File file1 : files) {
-            System.out.println(file1);
+            System.out.println(file1.getAbsoluteFile());
         }
     }
 
