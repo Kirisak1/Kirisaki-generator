@@ -7,7 +7,7 @@ import lombok.Data;
  * 动态文件对象
  */
 @Data
-public class MainTemplate {
+public class DataModel {
     /**
      * 作者名称
      */

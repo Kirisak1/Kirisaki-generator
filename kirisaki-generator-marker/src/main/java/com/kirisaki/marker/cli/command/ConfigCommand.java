@@ -1,4 +1,4 @@
-package com.kirisaki.cli.command;
+package com.kirisaki.marker.cli.command;
 import cn.hutool.core.util.ReflectUtil;
 import picocli.CommandLine.*;
 
@@ -15,7 +15,7 @@ public class ConfigCommand implements Runnable {
         for (Field field : fields) {
             String name = field.getName();
             Class<?> type = field.getType();
-            System.out.println(type +"\n"+name);
+            System.out.println(type +"\t"+name);
         }
     }
 }

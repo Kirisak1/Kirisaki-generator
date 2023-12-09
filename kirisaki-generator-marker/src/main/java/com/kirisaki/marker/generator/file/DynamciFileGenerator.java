@@ -1,4 +1,4 @@
-package com.kirisaki.marker.generator;
+package com.kirisaki.marker.generator.file;
 
 import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
@@ -35,7 +35,7 @@ public class DynamciFileGenerator {
         cfg.setNumberFormat("0.######");
         String outName = new File(input).getName();
         Template template = cfg.getTemplate(outName);
-        //校验文件是否存在
+        //校验文件是否存在,不存在就创建
         if (!FileUtil.exist(out)) {
             FileUtil.touch(out);
         }

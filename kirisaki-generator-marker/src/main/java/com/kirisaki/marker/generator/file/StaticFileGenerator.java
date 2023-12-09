@@ -1,4 +1,4 @@
-package com.kirisaki.marker.generator;
+package com.kirisaki.marker.generator.file;
 
 import cn.hutool.core.io.FileUtil;
 

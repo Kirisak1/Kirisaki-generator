@@ -1,8 +1,8 @@
-package com.kirisaki.cli.command;
+package com.kirisaki.marker.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.kirisaki.generator.MainGenerator;
-import com.kirisaki.model.MainTemplate;
+import com.kirisaki.marker.generator.file.FileGenerator;
+import com.kirisaki.marker.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -24,10 +24,10 @@ public class GenerateCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        MainTemplate configTemplate = new MainTemplate();
+        DataModel configTemplate = new DataModel();
         //通过this 将这个类的成员变量赋值给另一个对象
         BeanUtil.copyProperties(this, configTemplate);
-        MainGenerator.doGenerator(configTemplate);
+        FileGenerator.doGenerator(configTemplate);
         return 0;
     }
     //作为子命令不需要写main方法, 主需要主命令处一个方法开启入口就可以

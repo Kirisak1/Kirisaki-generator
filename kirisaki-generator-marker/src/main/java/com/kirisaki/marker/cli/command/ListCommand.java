@@ -1,4 +1,4 @@
-package com.kirisaki.cli.command;
+package com.kirisaki.marker.cli.command;
 
 import cn.hutool.core.io.FileUtil;
 import picocli.CommandLine.*;
@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * @author kirisaki
  */
-// @Command(name = "list", description = "输出文件列表", mixinStandardHelpOptions = true)
 @Command(name = "list",description = "输出文件列表", mixinStandardHelpOptions = true)
 public class ListCommand implements Runnable {
     @Override

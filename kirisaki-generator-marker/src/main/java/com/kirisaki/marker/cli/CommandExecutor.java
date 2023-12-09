@@ -1,8 +1,8 @@
-package com.kirisaki.cli;
+package com.kirisaki.marker.cli;
 
-import com.kirisaki.cli.command.ConfigCommand;
-import com.kirisaki.cli.command.GenerateCommand;
-import com.kirisaki.cli.command.ListCommand;
+import com.kirisaki.marker.cli.command.ConfigCommand;
+import com.kirisaki.marker.cli.command.GenerateCommand;
+import com.kirisaki.marker.cli.command.ListCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 

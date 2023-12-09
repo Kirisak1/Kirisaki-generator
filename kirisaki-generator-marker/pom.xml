@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kirisaki</groupId>
-    <artifactId>kirisaki-generator-basic</artifactId>
+    <artifactId>kirisaki-generator-marker</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -62,7 +62,7 @@
                     <encoding>UTF-8</encoding>
                     <archive>
                         <manifest>
-                            <mainClass>com.kirisaki.Main</mainClass>
+                            <mainClass>com.kirisaki.marker.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

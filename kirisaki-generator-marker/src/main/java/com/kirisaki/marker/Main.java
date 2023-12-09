@@ -1,9 +1,9 @@
-package com.kirisaki;
+package com.kirisaki.marker;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.kirisaki.cli.CommandExecutor;
-import com.kirisaki.cli.command.GenerateCommand;
+import com.kirisaki.marker.cli.CommandExecutor;
+import com.kirisaki.marker.cli.command.GenerateCommand;
 import picocli.CommandLine.Option;
 
 import java.lang.reflect.Field;

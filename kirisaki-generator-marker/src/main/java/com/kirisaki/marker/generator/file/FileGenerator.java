@@ -1,10 +1,13 @@
-package com.kirisaki.marker.generator;
+package com.kirisaki.marker.generator.file;
 
 import freemarker.template.TemplateException;
 
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @author Kirisaki
+ */
 public class FileGenerator {
     public static void doGenerator(Object data) throws TemplateException, IOException {
         //获取当前文件夹的路径
