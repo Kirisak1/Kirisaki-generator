@@ -1,4 +1,4 @@
-package com.kirisaki.marker.generator.file;
+package ${basePackage}.generator;
 
 import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
@@ -15,10 +15,10 @@ import java.nio.file.Paths;
 
 /**
  * 动态生成
- * @author Kirisaki
+ * @author ${author}
  */
-public class DynamciFileGenerator {
-    private DynamciFileGenerator() {
+public class DynamicGenerator {
+    private DynamicGenerator() {
 
     }
     /**

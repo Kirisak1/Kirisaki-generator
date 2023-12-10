@@ -1,5 +1,6 @@
 package com.kirisaki.generator;
 
+import cn.hutool.core.io.FileUtil;
 import com.kirisaki.model.MainTemplate;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -48,7 +49,9 @@ public class DynamicGenerator {
         String outName = new File(input).getName();
         //修复生成文件中的乱码问题
         Template template = cfg.getTemplate(outName);
-
+        if (!FileUtil.exist(out)) {
+            FileUtil.touch(out);
+        }
         //生成文件
         // FileWriter writer = new FileWriter(out);
         //修改输出的java文件乱码问题

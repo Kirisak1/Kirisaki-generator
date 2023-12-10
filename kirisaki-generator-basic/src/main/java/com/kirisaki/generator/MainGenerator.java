@@ -8,17 +8,26 @@ import java.io.IOException;
 
 public class MainGenerator {
     public static void doGenerator(Object data) throws TemplateException, IOException {
-        //生成静态文件
-        String property = System.getProperty("user.dir");
-        File parent = new File(property).getParentFile();
-        String inptut = parent+ File.separator+"kisirsaki-generator-demo-project/acm-template";
-        StaticGenerator.copyFilesByRecursive(inptut,property);
+
         //生成动态文件
-        String dynamicInput = property + File.separator + "src/main/resources/templates/MainTemplate.java.ftl";
-        String dynamicOut = property + File.separator+"/acm-template/src/com/yupi/acm/MainTemplate.java";
-        DynamicGenerator.dynamic(dynamicInput,dynamicOut,data);
-        
+        String inputRootPath = "D:\\develop\\ideaprojects\\kirisaki-generator\\kisirsaki-generator-demo-project\\acm-template-pro";
+        String outputRootPath = "D:\\develop\\ideaprojects\\kirisaki-generator\\acm-template-pro";
+        String input;
+        String output;
+        input = new File(inputRootPath, "/src/com/yupi/acm/MainTemplate.java.ftl").getAbsolutePath();
+        output = new File(outputRootPath, "/src/com/yupi/acm/MainTemplate.java").getAbsolutePath();
+        DynamicGenerator.dynamic(input, output, data);
+        //生成静态文件
+        input = new File(inputRootPath, ".gitignore").getAbsolutePath();
+        output = new File(outputRootPath, ".gitignore").getAbsolutePath();
+        StaticGenerator.copyFilesByRecursive(input, output);
+        //生成静态文件
+        input = new File(inputRootPath, "README.md").getAbsolutePath();
+        output = new File(outputRootPath, "README.md").getAbsolutePath();
+        StaticGenerator.copyFilesByRecursive(input, output);
+
     }
+
     public static void main(String[] args) throws TemplateException, IOException {
         MainTemplate configTemplate = new MainTemplate();
         configTemplate.setAuthor("KK");

@@ -23,8 +23,8 @@ public class Meta {
     @NoArgsConstructor
     @Data
     public static class FileConfig {
-        private String inputPath;
-        private String outputPath;
+        private String inputRootPath;
+        private String outputRootPath;
         private String type;
         private List<FileInfo> files;
 
@@ -48,7 +48,7 @@ public class Meta {
         public static class ModelInfo{
             private String fieldName;
             private String type;
-            private String comment;
+            private String description;
             private Object defaultValue;
             private String abbr;
         }

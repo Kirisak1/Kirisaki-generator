@@ -1,17 +1,17 @@
-package com.kirisaki.marker.cli;
+package ${basePackage}.cli;
 
-import com.kirisaki.marker.cli.command.ConfigCommand;
-import com.kirisaki.marker.cli.command.GenerateCommand;
-import com.kirisaki.marker.cli.command.ListCommand;
+import ${basePackage}.cli.command.ConfigCommand;
+import ${basePackage}.cli.command.GenerateCommand;
+import ${basePackage}.cli.command.ListCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 /**
  * 主类
  *
- * @author kirisaki
+ * @author ${author}
  */
-@Command(name = "kirisaki", mixinStandardHelpOptions = true)
+@Command(name = "${name}", mixinStandardHelpOptions = true)
 public class CommandExecutor implements Runnable {
 
     private final CommandLine commandLine;

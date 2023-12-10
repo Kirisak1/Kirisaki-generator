@@ -1,18 +1,18 @@
 {
   "author":  "kirisaki",
   "name": "kirisaki-generate",
-  "basePackage": "com.github.kirisaki",
+  "basePackage":"com.kirisaki",
   "version": "1.0",
   "description": "代码生成器",
   "createTime": "2023-12-9",
   "fileConfig": {
-    "inputPath":"",
-    "outputPath": "generated",
+    "inputRootPath":"D:/develop/ideaprojects/kirisaki-generator/kisirsaki-generator-demo-project/acm-template-pro",
+    "outputRootPath": "generated",
     "type": "dir",
     "files": [
       {
-        "inputPath": "src/com/kirisaki/acm/MainTemplate.java.ftl",
-        "outputPath": "src/com/kirisaki/acm/MainTemplate.java",
+        "inputPath": "src/com/yupi/acm/MainTemplate.java.ftl",
+        "outputPath": "src/com/yupi/acm/MainTemplate.java",
         "type":  "file",
         "generateType": "dynamic"
       },
@@ -35,21 +35,21 @@
       {
         "fieldName":"flag",
         "type": "boolean",
-        "comment": "是否生成循环",
-        "defaultValue": "false",
+        "description": "是否生成循环",
+        "defaultValue": false,
         "abbr": "l"
       },
       {
         "fieldName":"author",
         "type": "String",
-        "comment": "作者注释",
+        "description": "作者注释",
         "defaultValue": "Kirisaki",
         "abbr": "a"
       },
       {
-        "fieldName":"outputText",
+        "fieldName":"summary",
         "type": "String",
-        "comment": "输出信息",
+        "description": "输出信息",
         "defaultValue": "sum=",
         "abbr": "o"
       }

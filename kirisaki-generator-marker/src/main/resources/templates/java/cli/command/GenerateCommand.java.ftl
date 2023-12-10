@@ -1,8 +1,8 @@
-package com.kirisaki.marker.cli.command;
+package ${basePackage}.cli.command;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.kirisaki.marker.generator.file.FileGenerator;
-import com.kirisaki.marker.model.DataModel;
+import ${basePackage}.generator.FileGenerator;
+import ${basePackage}.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -10,17 +10,15 @@ import picocli.CommandLine.Option;
 import java.util.concurrent.Callable;
 
 /**
- * @author kirisaki
+ * @author ${author}
  */
 @Command(name = "generate", description = "生成代码", mixinStandardHelpOptions = true)
 @Data
 public class GenerateCommand implements Callable<Integer> {
-    @Option(names = {"-a", "--author"}, description = "作者名称", echo = true, interactive = true, arity = "0..1")
-    private String author = "";
-    @Option(names = {"-s", "--summary"}, description = "输出结果", echo = true, interactive = true, arity = "0..1")
-    private String summary = "";
-    @Option(names = {"-f", "--flag"}, description = "是否开启循环", echo = true, interactive = true, arity = "0..1")
-    private Boolean flag;
+    <#list modelConfig.models as modelInfo>
+    @Option(names = {<#if modelInfo.abbr??>"-${modelInfo.abbr}",</#if> "--${modelInfo.fieldName}"},<#if modelInfo.description??> description = "${modelInfo.description}",</#if> echo = true, interactive = true, arity = "0..1")
+    private ${modelInfo.type} ${modelInfo.fieldName}<#if modelInfo.defaultValue??> = ${modelInfo.defaultValue?c}</#if>;
+    </#list>
 
     @Override
     public Integer call() throws Exception {

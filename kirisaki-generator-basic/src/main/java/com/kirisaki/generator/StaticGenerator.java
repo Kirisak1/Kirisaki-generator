@@ -21,28 +21,24 @@ public class StaticGenerator {
         System.out.println(src);
         FileUtil.copy(src, parent, true);
     }
+
     /**
      * 递归拷贝文件（递归实现，会将输入目录完整拷贝到输出目录下）
+     *
      * @param inputPath
      * @param outputPath
      */
     public static void copyFilesByRecursive(String inputPath, String outputPath) {
-        File inputFile = new File(inputPath);
-        File outputFile = new File(outputPath);
-        try {
-            copyFileByRecursive(inputFile, outputFile);
-        } catch (Exception e) {
-            System.err.println("文件复制失败");
-            e.printStackTrace();
-        }
+        FileUtil.copy(inputPath, outputPath, false);
     }
 
     /**
      * 文件 A => 目录 B，则文件 A 放在目录 B 下
      * 文件 A => 文件 B，则文件 A 覆盖文件 B
      * 目录 A => 目录 B，则目录 A 放在目录 B 下
-     *
+     * <p>
      * 核心思路：先创建目录，然后遍历目录内的文件，依次复制
+     *
      * @param inputFile
      * @param outputFile
      * @throws IOException
