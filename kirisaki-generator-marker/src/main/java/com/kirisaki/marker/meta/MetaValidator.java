@@ -19,35 +19,51 @@ import java.util.List;
 public class MetaValidator {
     public static void doValidAndFill(Meta meta) {
         //不需要再new 了 可以直接传进来一个meta对象
-        String author = meta.getAuthor();
-        String name = meta.getName();
-        String basePackage = meta.getBasePackage();
-        String version = meta.getVersion();
-        String description = meta.getDescription();
-        String createTime = meta.getCreateTime();
-        FileConfig fileConfig = meta.getFileConfig();
+
+        //基本信息校验
+        validAndFillMetaRoot(meta);
+        //生成文件校验
+        validAndFillFileConfigValid(meta);
+        //命令行参数校验
+        validAndFIllModelConfigValid(meta);
+    }
+
+    /**
+     * 命令行参数校验
+     *
+     * @param meta
+     */
+    private static void validAndFIllModelConfigValid(Meta meta) {
         ModelConfig modelConfig = meta.getModelConfig();
-        //校验
-        if (StrUtil.isEmpty(author)) {
-            meta.setAuthor("kk");
+        if (ObjectUtil.isEmpty(modelConfig)) {
+            // throw new MetaException("modelConfig is null");
+            return;
         }
-        if (StrUtil.isBlank(name)) {
-            meta.setName("my-generator");
+        List<ModelConfig.ModelInfo> models = modelConfig.getModels();
+        if (CollectionUtil.isEmpty(models)) {
+            throw new MetaException("models is null");
         }
-        if (StrUtil.isBlank(basePackage)) {
-            meta.setBasePackage("com.kirisaki");
+        for (ModelConfig.ModelInfo model : models) {
+
+            if (StrUtil.isBlank(model.getFieldName())) {
+                throw new MetaException("model fieldName is null");
+            }
+            String type = model.getType();
+            StrUtil.blankToDefault(type, "String");
+            model.setType(type);
         }
-        if (StrUtil.isBlank(version)) {
-            meta.setVersion("1.0.0");
-        }
-        if (StrUtil.isBlank(description)) {
-            meta.setDescription("我的代码生成器");
-        }
-        if (StrUtil.isBlank(createTime)) {
-            meta.setCreateTime(DateUtil.today());
-        }
+    }
+
+    /**
+     * 生成文件校验
+     *
+     * @param meta
+     */
+    private static void validAndFillFileConfigValid(Meta meta) {
+        FileConfig fileConfig = meta.getFileConfig();
         if (ObjectUtil.isEmpty(fileConfig)) {
-            throw new MetaException("this fileConfig is null");
+            // throw new MetaException("this fileConfig is null");  是return 还是抛异常有待商榷
+            return;
         }
         //校验
         String sourceRootPath = fileConfig.getSourceRootPath();
@@ -61,12 +77,12 @@ public class MetaValidator {
         if (StrUtil.isBlank(inputRootPath)) {
             fileConfig.setInputRootPath(".source/" + FileUtil.getLastPathEle(Paths.get(sourceRootPath)).getFileName().toString());
         }
-        if (StrUtil.isBlank(outputRootPath)) {
-            fileConfig.setOutputRootPath("generated");
-        }
-        if (StrUtil.isBlank(type)) {
-            fileConfig.setType("dir");
-        }
+
+        StrUtil.blankToDefault(outputRootPath, "generated");
+        fileConfig.setOutputRootPath(outputRootPath);
+
+        StrUtil.blankToDefault(type, "dir");
+        fileConfig.setType(type);
         if (CollectionUtil.isEmpty(files)) {
             throw new MetaException("生成文件为空,请传入文件");
         }
@@ -103,21 +119,39 @@ public class MetaValidator {
                 }
             }
         }
-        if (ObjectUtil.isEmpty(modelConfig)) {
-            throw new MetaException("modelConfig is null");
-        }
-        List<ModelConfig.ModelInfo> models = modelConfig.getModels();
-        if (CollectionUtil.isEmpty(models)) {
-            throw new MetaException("models is null");
-        }
-        for (ModelConfig.ModelInfo model : models) {
+    }
 
-            if (StrUtil.isBlank(model.getFieldName())) {
-                throw new MetaException("model fieldName is null");
-            }
-            if (StrUtil.isBlank(model.getType())) {
-                model.setType("String");
-            }
-        }
+    /**
+     * 基本信息校验
+     *
+     * @param meta
+     */
+    private static void validAndFillMetaRoot(Meta meta) {
+
+        String author = meta.getAuthor();
+        String name = meta.getName();
+        String basePackage = meta.getBasePackage();
+        String version = meta.getVersion();
+        String description = meta.getDescription();
+        String createTime = meta.getCreateTime();
+        //校验
+
+        StrUtil.emptyToDefault(author, "kk");
+        meta.setAuthor(author);
+
+        StrUtil.blankToDefault(name, "my-generator");
+        meta.setName(name);
+
+        StrUtil.blankToDefault(basePackage, "com.kirisaki");
+        meta.setBasePackage(basePackage);
+
+        StrUtil.blankToDefault(version, "1.0.0");
+        meta.setVersion(version);
+
+        StrUtil.blankToDefault(description, "我的代码生成器");
+        meta.setDescription(description);
+
+        StrUtil.blankToDefault(createTime, DateUtil.today());
+        meta.setCreateTime(createTime);
     }
 }

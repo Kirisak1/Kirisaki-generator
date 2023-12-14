@@ -41,8 +41,10 @@ public class MetaManager {
         // 读取meta.json文件，并将其转换为字符串
         String meataJson = ResourceUtil.readUtf8Str("meta.json");
         Meta newMeta = JSONUtil.toBean(meataJson, Meta.class);
-        //在创建对象时需要做的操作
-        Meta.FileConfig fileConfig = newMeta.getFileConfig();
+
+        //校验参数
+        MetaValidator.doValidAndFill(newMeta);
+
         return newMeta;
     }
 }
