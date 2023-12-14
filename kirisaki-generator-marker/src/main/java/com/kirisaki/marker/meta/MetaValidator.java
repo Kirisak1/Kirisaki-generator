@@ -7,6 +7,9 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.kirisaki.marker.meta.Meta.FileConfig;
 import com.kirisaki.marker.meta.Meta.ModelConfig;
+import com.kirisaki.marker.meta.enums.FileTypeEnum;
+import com.kirisaki.marker.meta.enums.FileGenerateEnum;
+import com.kirisaki.marker.meta.enums.ModelTypeEnum;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -49,7 +52,7 @@ public class MetaValidator {
                 throw new MetaException("model fieldName is null");
             }
             String type = model.getType();
-            StrUtil.blankToDefault(type, "String");
+            StrUtil.blankToDefault(type, ModelTypeEnum.STRING.getValue());
             model.setType(type);
         }
     }
@@ -81,8 +84,9 @@ public class MetaValidator {
         StrUtil.blankToDefault(outputRootPath, "generated");
         fileConfig.setOutputRootPath(outputRootPath);
 
-        StrUtil.blankToDefault(type, "dir");
+        StrUtil.blankToDefault(type, FileTypeEnum.DIR.getValue());
         fileConfig.setType(type);
+
         if (CollectionUtil.isEmpty(files)) {
             throw new MetaException("生成文件为空,请传入文件");
         }
@@ -105,17 +109,17 @@ public class MetaValidator {
             if (StrUtil.isBlank(fileType)) {
                 //判断末尾是否有后缀
                 if (StrUtil.isNotBlank(FileUtil.getSuffix(inputPath))) {
-                    file.setType("file");
+                    file.setType(FileTypeEnum.FILE.getValue());
                 } else {
-                    file.setType("dir");
+                    file.setType(FileTypeEnum.DIR.getValue());
                 }
             }
 
             if (StrUtil.isBlank(generateType)) {
                 if (inputPath.endsWith(".ftl")) {
-                    file.setGenerateType("dynamic");
+                    file.setGenerateType(FileGenerateEnum.DYNAMIC.getValue());
                 } else {
-                    file.setGenerateType("static");
+                    file.setGenerateType(FileGenerateEnum.STATIC.getValue());
                 }
             }
         }
