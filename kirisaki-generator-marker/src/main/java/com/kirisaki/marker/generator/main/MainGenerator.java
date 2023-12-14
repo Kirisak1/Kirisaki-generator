@@ -3,9 +3,11 @@ package com.kirisaki.marker.generator.main;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import com.kirisaki.marker.generator.GitGenerator;
 import com.kirisaki.marker.generator.JarGenerator;
 import com.kirisaki.marker.generator.ScriptGenerator;
 import com.kirisaki.marker.generator.file.DynamciFileGenerator;
+import com.kirisaki.marker.generator.file.StaticFileGenerator;
 import com.kirisaki.marker.meta.Meta;
 import com.kirisaki.marker.meta.MetaManager;
 import freemarker.template.TemplateException;
@@ -111,5 +113,29 @@ public class MainGenerator {
         //可以使用String,format进行拼接
         String jarPath = "target/" + meta.getName() + "-" + meta.getVersion() + "-jar-with-dependencies.jar";
         ScriptGenerator.doGenerate(shellOutputFilePath,jarPath);
+
+        //生成.gitignore文件
+        StaticFileGenerator.copyFilesByHutool(projectPath+ File.separator+".gitignore",outputPath);
+
+        //初始化git仓库
+        GitGenerator.gitInit(outputPath);
+
+        //生成精简的文件jar包
+        String disOutputPath = outputPath+"-dis";
+        String jarInputPath = outputPath + File.separator + jarPath;
+        String jarAbsolutePath = disOutputPath + File.separator;
+        //生成target目录
+        FileUtil.mkdir(jarAbsolutePath);
+        //生成jar包
+        String disOutpuTJarPath = jarAbsolutePath+ File.separator+jarPath;
+        FileUtil.copy(jarInputPath, disOutpuTJarPath, true);
+        //生成精简版的模板文件
+        FileUtil.copy(sourceCopyDestPath, disOutputPath, true);
+        //生成精简版的脚本文件
+        String ScriptPath = outputPath + File.separator + "generator.bat";
+        String ScriptShPath = outputPath + File.separator + "generator.sh";
+        FileUtil.copy(ScriptPath, disOutputPath, true);
+        FileUtil.copy(ScriptShPath, disOutputPath, true);
+
     }
 }
