@@ -29,6 +29,11 @@ public class MainGenerator {
             //生成目录
             FileUtil.mkdir(outputPath);
         }
+        //将模板文件生成到指定相对路径
+        String sourceRootPath = meta.getFileConfig().getSourceRootPath();
+        String sourceCopyDestPath = outputPath + File.separator + ".source";
+        FileUtil.copy(sourceRootPath, sourceCopyDestPath, true);
+
         //读取resouce  不使用hutool工具包是因为hutool工具包获取的是resource内的文件内容
         ClassPathResource classPathResource = new ClassPathResource("");
         String inputResourcePath = classPathResource.getAbsolutePath();
@@ -68,7 +73,7 @@ public class MainGenerator {
         //生成java文件
         DynamciFileGenerator.dynamic(inputFilePath, outFilePath, meta);
 
-        //获取模板文件路径
+        //生成命令行入口文件
         inputFilePath = inputResourcePath + File.separator + "templates/java/Main.java.ftl";
         outFilePath = outputBaseJavaPackagePath + "/Main.java";
         //生成java文件
@@ -83,20 +88,22 @@ public class MainGenerator {
         //获取模板文件路径  MainGenerator
         inputFilePath = inputResourcePath + File.separator + "templates/java/generator/FileGenerator.java.ftl";
         outFilePath = outputBaseJavaPackagePath + "/generator/FileGenerator.java";
-        //生成java文件
         DynamciFileGenerator.dynamic(inputFilePath, outFilePath, meta);
 
         //获取模板文件路径  StaticFileGenerator
         inputFilePath = inputResourcePath + File.separator + "templates/java/generator/StaticGenerator.java.ftl";
         outFilePath = outputBaseJavaPackagePath + File.separator + "/generator/StaticGenerator.java";
-        //生成java文件
         DynamciFileGenerator.dynamic(inputFilePath, outFilePath, meta);
 
         //获取模板文件路径  pom
         inputFilePath = inputResourcePath + File.separator + "templates/pom.xml.ftl";
         outFilePath = outputPath + File.separator + "pom.xml";
-        //生成pom文件
         DynamciFileGenerator.dynamic(inputFilePath, outFilePath, meta);
+        //生成READ.md文件
+        inputFilePath = inputResourcePath + File.separator + "templates/README.md.ftl";
+        outFilePath = outputPath + File.separator + "README.md";
+        DynamciFileGenerator.dynamic(inputFilePath, outFilePath, meta);
+
         //构建jar包
         JarGenerator.doGenerate(outputPath);
         //生成Script脚本

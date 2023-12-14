@@ -6,7 +6,8 @@
   "description": "代码生成器",
   "createTime": "2023-12-9",
   "fileConfig": {
-    "inputRootPath":"D:/develop/ideaprojects/kirisaki-generator/kisirsaki-generator-demo-project/acm-template-pro",
+    "sourceRootPath": "D:/develop/ideaprojects/kirisaki-generator/kisirsaki-generator-demo-project/acm-template-pro",
+    "inputRootPath":".source/acm-template-pro",
     "outputRootPath": "generated",
     "type": "dir",
     "files": [
@@ -33,7 +34,7 @@
   "modelConfig": {
     "models": [
       {
-        "fieldName":"flag",
+        "fieldName":"loop",
         "type": "boolean",
         "description": "是否生成循环",
         "defaultValue": false,

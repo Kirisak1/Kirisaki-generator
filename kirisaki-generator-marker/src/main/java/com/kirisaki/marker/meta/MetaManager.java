@@ -40,7 +40,6 @@ public class MetaManager {
     private static Meta initeMeta() {
         // 读取meta.json文件，并将其转换为字符串
         String meataJson = ResourceUtil.readUtf8Str("meta.json");
-        //这段代码没理解
         Meta newMeta = JSONUtil.toBean(meataJson, Meta.class);
         //在创建对象时需要做的操作
         Meta.FileConfig fileConfig = newMeta.getFileConfig();
