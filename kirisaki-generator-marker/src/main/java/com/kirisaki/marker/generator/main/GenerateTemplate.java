@@ -42,8 +42,7 @@ public abstract class GenerateTemplate {
         String jarPath = buildScript(meta, outputPath);
 
         //生成.gitignore文件
-        StaticFileGenerator.copyFilesByHutool(projectPath+ File.separator+".gitignore",outputPath);
-
+            StaticFileGenerator.copyFilesByHutool(projectPath+ File.separator+".gitignore",outputPath);
         //初始化git仓库
         GitGenerator.gitInit(outputPath);
 
@@ -54,9 +53,9 @@ public abstract class GenerateTemplate {
 
     /**
      * 生成精简的运行程序
-     * @param outputPath
-     * @param sourceCopyDestPath
-     * @param jarPath
+     * @param outputPath 输出文件路径
+     * @param sourceCopyDestPath 源复制文件路径
+     * @param jarPath jar包路径
      */
     protected void buildDist(String outputPath, String sourceCopyDestPath, String jarPath) {
         String disOutputPath = outputPath +"-dis";
@@ -78,9 +77,9 @@ public abstract class GenerateTemplate {
 
     /**
      * 封装脚本
-     * @param meta
-     * @param outputPath
-     * @return
+     * @param meta 元信息模型
+     * @param outputPath 输出目录
+     * @return jar包目录
      */
     protected String buildScript(Meta meta, String outputPath) {
         //生成Script脚本
@@ -93,10 +92,10 @@ public abstract class GenerateTemplate {
 
     /**
      * 代码生成
-     * @param meta
-     * @param outputPath
-     * @throws IOException
-     * @throws TemplateException
+     * @param meta 元信息模型
+     * @param outputPath 输出目录
+     * @throws IOException io异常
+     * @throws TemplateException 生成文件异常
      */
     protected void generateCode(Meta meta, String outputPath) throws IOException, TemplateException {
         //读取resouce  不使用hutool工具包是因为hutool工具包获取的是resource内的文件内容
@@ -170,6 +169,12 @@ public abstract class GenerateTemplate {
         DynamciFileGenerator.dynamic(inputFilePath, outFilePath, meta);
     }
 
+    /**
+     * 复制原始文件
+     * @param meta 元信息
+     * @param outputPath 输出目录
+     * @return 源文件复制后的目录
+     */
     protected String copySource(Meta meta, String outputPath) {
         //将模板文件生成到指定相对路径
         String sourceRootPath = meta.getFileConfig().getSourceRootPath();

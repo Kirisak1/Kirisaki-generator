@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class MainTemplate {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-<#if flag>
+<#if loop>
         while (scanner.hasNext()) {
 </#if>
             // 读取输入元素个数
@@ -29,7 +29,7 @@ public class MainTemplate {
             }
 
             System.out.println("${summary}: " + sum);
-<#if flag>
+<#if loop>
         }
 </#if>
         scanner.close();

@@ -17,7 +17,7 @@ public class MainGenerator extends  GenerateTemplate {
      */
     @Override
     protected void buildDist(String outputPath, String sourceCopyDestPath, String jarPath) {
-       super.buildDist(outputPath, sourceCopyDestPath, jarPath);
+        System.out.println("不需要打印dist");
     }
 
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {

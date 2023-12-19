@@ -15,7 +15,7 @@
 示例命令
 
 ```
-./generator.sh 或(./generator.bat) generate <#list modelConfig.models as modelInfo> -${modelInfo.abbr} </#list>
+./generator.sh 或(./generator.bat) generate <#list modelConfig.models as modelInfo> --${modelInfo.fieldName} </#list>
 ```
 
 <#list modelConfig.models as modelInfo>
@@ -27,6 +27,9 @@ ${modelInfo?index+1}) ${modelInfo.fieldName}
 
     默认值 ${modelInfo.defaultValue?c}
 
+<#if modelInfo.abbr??>
     简写 -${modelInfo.abbr}
+</#if>
+
 
 </#list>

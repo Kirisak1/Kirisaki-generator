@@ -18,10 +18,11 @@
         "generateType": "dynamic"
       },
       {
-        "inputPath": ".ignore",
-        "outputPath": ".ignore",
+        "inputPath": ".gitignore",
+        "outputPath": ".gitignore",
         "type": "file",
-        "generateType": "static"
+        "generateType": "static",
+        "condition": "needGit"
       },
       {
         "inputPath": "README.md",
@@ -53,6 +54,12 @@
         "description": "输出信息",
         "defaultValue": "sum=",
         "abbr": "o"
+      },
+      {
+        "fieldName":"needGit",
+        "type": "Boolean",
+        "description": "是否需要.gitignore文件",
+        "defaultValue": true
       }
     ]
   }
