@@ -25,7 +25,13 @@ public class FileGenerator {
         String output;
 
     <#list modelConfig.models as modelInfo>
+        <#if modelInfo.groupKey??>
+        <#list modelInfo.models as subModelInfo>
+        ${subModelInfo.type} ${subModelInfo.fieldName} = data.${modelInfo.groupKey}.${subModelInfo.fieldName};
+        </#list>
+        <#else>
         ${modelInfo.type} ${modelInfo.fieldName} = data.${modelInfo.fieldName};
+        </#if>
     </#list>
 
     <#list fileConfig.files as fileInfo>

@@ -1,5 +1,6 @@
 package com.kirisaki.marker.meta;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
@@ -7,12 +8,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.kirisaki.marker.meta.Meta.FileConfig;
 import com.kirisaki.marker.meta.Meta.ModelConfig;
-import com.kirisaki.marker.meta.enums.FileTypeEnum;
 import com.kirisaki.marker.meta.enums.FileGenerateEnum;
+import com.kirisaki.marker.meta.enums.FileTypeEnum;
 import com.kirisaki.marker.meta.enums.ModelTypeEnum;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 对元数据进行校验
@@ -43,10 +45,18 @@ public class MetaValidator {
             return;
         }
         List<ModelConfig.ModelInfo> models = modelConfig.getModels();
-        if (CollectionUtil.isEmpty(models)) {
+        if (CollUtil.isEmpty(models)) {
             throw new MetaException("models is null");
         }
         for (ModelConfig.ModelInfo model : models) {
+            if (StrUtil.isNotEmpty(model.getGroupKey())) {
+                String allArgsStr = model.getModels().stream()
+                        .map(subModel -> String.format("\"--%s\"", subModel.getFieldName())
+                        )
+                        .collect(Collectors.joining(","));
+                model.setAllArgsStr(allArgsStr);
+                continue;
+            }
 
             if (StrUtil.isBlank(model.getFieldName())) {
                 throw new MetaException("model fieldName is null");
@@ -97,7 +107,7 @@ public class MetaValidator {
             String fileType = file.getType();
             String generateType = file.getGenerateType();
             //todo 如果分组就不做校验?
-            if(FileTypeEnum.GROUP.getValue().equals(fileType)){
+            if (FileTypeEnum.GROUP.getValue().equals(fileType)) {
                 continue;
             }
             if (StrUtil.isBlank(inputPath)) {

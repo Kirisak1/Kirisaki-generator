@@ -15,18 +15,20 @@
 示例命令
 
 ```
-./generator.sh 或(./generator.bat) generate <#list modelConfig.models as modelInfo> --${modelInfo.fieldName} </#list>
+./generator.sh 或(./generator.bat) generate <#list modelConfig.models as modelInfo><#if modelInfo.filedName??> --${modelInfo.fieldName}</#if> </#list>
 ```
 
 <#list modelConfig.models as modelInfo>
+<#if modelInfo.filedName??>
 ${modelInfo?index+1}) ${modelInfo.fieldName}
+</#if>
 
     类型 ${modelInfo.type}
 
     描述 ${modelInfo.description}
-
+<#if modelInfo.defaultValue??>
     默认值 ${modelInfo.defaultValue?c}
-
+</#if>
 <#if modelInfo.abbr??>
     简写 -${modelInfo.abbr}
 </#if>
