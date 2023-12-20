@@ -18,8 +18,11 @@ public enum FileTypeEnum {
     /**
      * 文件
      */
-    FILE("文件", "file");
-
+    FILE("文件", "file"),
+    /**
+     * 分组
+     */
+    GROUP("文件组", "group");
     private String text;
     private String value;
 

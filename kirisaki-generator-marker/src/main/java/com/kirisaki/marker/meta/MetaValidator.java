@@ -96,6 +96,10 @@ public class MetaValidator {
             String outputPath = file.getOutputPath();
             String fileType = file.getType();
             String generateType = file.getGenerateType();
+            //todo 如果分组就不做校验?
+            if(FileTypeEnum.GROUP.getValue().equals(fileType)){
+                continue;
+            }
             if (StrUtil.isBlank(inputPath)) {
                 throw new MetaException("inputPath is null");
             }

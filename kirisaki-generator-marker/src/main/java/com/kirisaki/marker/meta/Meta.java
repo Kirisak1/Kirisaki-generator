@@ -37,6 +37,9 @@ public class Meta {
             private String type;
             private String generateType;
             private String condition;
+            private String groupKey;
+            private String groupName;
+            private List<FileInfo> files;
         }
     }
 
