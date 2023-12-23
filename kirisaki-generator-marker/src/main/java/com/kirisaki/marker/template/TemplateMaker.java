@@ -1,6 +1,7 @@
 package com.kirisaki.marker.template;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.kirisaki.marker.meta.Meta;
@@ -9,6 +10,7 @@ import com.kirisaki.marker.meta.enums.FileTypeEnum;
 import com.kirisaki.marker.meta.enums.ModelTypeEnum;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,17 +19,28 @@ import java.util.List;
  */
 public class TemplateMaker {
     public static void main(String[] args) {
+        //二 工作空间隔离
+        String projectPath = System.getProperty("user.dir");
+        String originProjectPath = new File(projectPath).getParent() + File.separator + "kisirsaki-generator-demo-project/acm-template";
+        //修改路径
+        //根据id来隔离不同批次生成的文件
+        long id = IdUtil.getSnowflakeNextId();
+        String tempDirPath = projectPath + File.separator + ".temp";
+        String templatePath = tempDirPath + File.separator + id;
+        if (!FileUtil.exist(new File(templatePath))) {
+            FileUtil.mkdir(new File(templatePath));
+        }
+        FileUtil.copy(new File(originProjectPath), new File(templatePath), true);
+
         //一 输入基本信息
         //1. 输入项目基本信息
         String description = "kk代码生成器";
         String name = "kirisaki-generate";
         //2.输入文件信息
-        //该方法在win系统下得到的路径有问题
-        String projectPath = System.getProperty("user.dir");
-        String sourceRootPath = new File(projectPath).getParent() + File.separator + "kisirsaki-generator-demo-project/acm-template";
-        //修改路径
-        sourceRootPath = StrUtil.replace(sourceRootPath, "\\", "/");
 
+        String sourceRootPath = templatePath + File.separator + FileUtil.getLastPathEle(Paths.get(originProjectPath)).toString();
+        //该方法在win系统下得到的路径有问题
+        sourceRootPath = StrUtil.replace(sourceRootPath, "\\", "/");
         String fileInputPath = "src/com/yupi/acm/MainTemplate.java";
         String fileOutputPath = fileInputPath + ".ftl";
         // 3.输入模板参数信息
