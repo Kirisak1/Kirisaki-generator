@@ -2,6 +2,7 @@ package com.kirisaki.marker.template;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
@@ -16,9 +17,7 @@ import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +49,7 @@ public class TemplateMaker {
         //替换变量(第二次)
         String searchStr = "BaseResponse";
         String inputFilePath1 = "src/main/java/com/yupi/springbootinit/common";
-        String inputFilePath2 = "src/main/java/com/yupi/springbootinit/controller";
+        String inputFilePath2 = "src/main/java/com/yupi/springbootinit/constant";
 
         TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
 
@@ -76,7 +75,7 @@ public class TemplateMaker {
         fileGroupConfig.setGroupKey("test");
         fileGroupConfig.setGroupName("测试分组");
         templateMakerFileConfig.setFileGroupConfig(fileGroupConfig);
-        
+
         long id = makeTemplate(meta, originProjectPath, templateMakerFileConfig, modelInfo, searchStr, 1738803991506710528L);
         System.out.println(id);
     }
@@ -244,11 +243,39 @@ public class TemplateMaker {
      * @return 返回去重后的文件列表
      */
     private static List<Meta.FileConfig.FileInfo> distinctFile(List<Meta.FileConfig.FileInfo> fileInfoList) {
-        return new ArrayList<>(fileInfoList.stream()
+        //分组策略:同分组内文件 merge,不同分组保留
+
+        //有分组的
+        Map<String, List<Meta.FileConfig.FileInfo>> groupKeyFileInfoListMap = fileInfoList
+                .stream()
+                .filter(fileInfo -> StrUtil.isNotBlank(fileInfo.getGroupKey()))
+                .collect(Collectors.groupingBy(Meta.FileConfig.FileInfo::getGroupKey));
+        //同组内配置合并
+        //保留每个组对应的合并后的对象map
+        Map<String, Meta.FileConfig.FileInfo> groupKeyMergedFileInfoMap = new HashMap<>();
+        for (Map.Entry<String, List<Meta.FileConfig.FileInfo>> entry : groupKeyFileInfoListMap.entrySet()) {
+            List<Meta.FileConfig.FileInfo> tempFileInfoList = entry.getValue();
+            List<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>(tempFileInfoList.stream()
+                    .flatMap(fileInfo -> fileInfo.getFiles().stream())
+                    .collect(Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath,  o-> o, (e, r) -> r)).values());
+            //使用新group配置
+            Meta.FileConfig.FileInfo newFileInfo = CollUtil.getLast(tempFileInfoList);
+            newFileInfo.setFiles(newFileInfoList);
+            String groupKey = entry.getKey();
+            groupKeyMergedFileInfoMap.put(groupKey, newFileInfo);
+        }
+
+        List<Meta.FileConfig.FileInfo> resultList = new ArrayList<>(groupKeyMergedFileInfoMap.values());
+        //无分组
+        List<Meta.FileConfig.FileInfo> noGroupFileInfoList = fileInfoList.stream()
+                .filter(fileInfo -> StrUtil.isBlank(fileInfo.getGroupKey()))
+                .collect(Collectors.toList());
+        resultList.addAll(new ArrayList<>(noGroupFileInfoList.stream()
                 .collect(
                         Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, fileinfo -> fileinfo, (o1, o2) -> o2)
                 )
-                .values());
+                .values()));
+        return resultList;
     }
 
     /**
@@ -264,4 +291,5 @@ public class TemplateMaker {
                 )
                 .values());
     }
+
 }
