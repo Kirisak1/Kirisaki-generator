@@ -55,8 +55,8 @@ public class TemplateMaker {
         TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
 
 
-        TemplateMakerFileConfig.FileinfoConfig fileinfoConfig1 = new TemplateMakerFileConfig.FileinfoConfig();
-        fileinfoConfig1.setPath(inputFilePath1);
+        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig1 = new TemplateMakerFileConfig.FileInfoConfig();
+        fileInfoConfig1.setPath(inputFilePath1);
         List<FileFilterConfig> fileFilterConfigList = new ArrayList<>();
         FileFilterConfig fileFilterConfig = FileFilterConfig.builder()
                 .range(FileFileterRangeEnum.FILE_NAME.getValue())
@@ -64,11 +64,11 @@ public class TemplateMaker {
                 .value("Base")
                 .build();
         fileFilterConfigList.add(fileFilterConfig);
-        fileinfoConfig1.setFiles(fileFilterConfigList);
+        fileInfoConfig1.setFiles(fileFilterConfigList);
 
-        TemplateMakerFileConfig.FileinfoConfig fileinfoConfig2 = new TemplateMakerFileConfig.FileinfoConfig();
-        fileinfoConfig2.setPath(inputFilePath2);
-        templateMakerFileConfig.setFiles(Arrays.asList(fileinfoConfig1, fileinfoConfig2));
+        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig2 = new TemplateMakerFileConfig.FileInfoConfig();
+        fileInfoConfig2.setPath(inputFilePath2);
+        templateMakerFileConfig.setFiles(Arrays.asList(fileInfoConfig1, fileInfoConfig2));
 
         long id = makeTemplate(meta, originProjectPath, templateMakerFileConfig, modelInfo, searchStr, 1738803991506710528L);
         System.out.println(id);
@@ -106,7 +106,7 @@ public class TemplateMaker {
 
         ArrayList<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>();
         //增加使用过滤器
-        for (TemplateMakerFileConfig.FileinfoConfig fileinfoConfig : templateMakerFileConfig.getFiles()) {
+        for (TemplateMakerFileConfig.FileInfoConfig fileinfoConfig : templateMakerFileConfig.getFiles()) {
             String inputFilePath = fileinfoConfig.getPath();
             //如果传过来的是相对路径就转换成绝对路径
             if (!inputFilePath.startsWith(sourceRootPath)) {

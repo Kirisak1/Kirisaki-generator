@@ -37,7 +37,7 @@ public class FileFilter {
      * @param file                 单个文件
      * @return 是否保留
      */
-    public static boolean doSingleFileFilter(List<FileFilterConfig> fileFilterConfigList, File file) {
+    private static boolean doSingleFileFilter(List<FileFilterConfig> fileFilterConfigList, File file) {
         String fileName = file.getName();
         String fileContent = FileUtil.readUtf8String(file);
 
