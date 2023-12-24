@@ -9,6 +9,10 @@ import cn.hutool.json.JSONUtil;
 import com.kirisaki.marker.meta.Meta;
 import com.kirisaki.marker.meta.enums.FileGenerateEnum;
 import com.kirisaki.marker.meta.enums.FileTypeEnum;
+import com.kirisaki.marker.template.enums.FileFileterRangeEnum;
+import com.kirisaki.marker.template.enums.FileFilterRuleEnum;
+import com.kirisaki.marker.template.model.FileFilterConfig;
+import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -47,8 +51,26 @@ public class TemplateMaker {
         String searchStr = "BaseResponse";
         String inputFilePath1 = "src/main/java/com/yupi/springbootinit/common";
         String inputFilePath2 = "src/main/java/com/yupi/springbootinit/controller";
-        List<String> intputFilePathList = Arrays.asList(inputFilePath1, inputFilePath2);
-        long id = makeTemplate(meta, originProjectPath, intputFilePathList, modelInfo, searchStr, 1738803991506710528L);
+
+        TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
+
+
+        TemplateMakerFileConfig.FileinfoConfig fileinfoConfig1 = new TemplateMakerFileConfig.FileinfoConfig();
+        fileinfoConfig1.setPath(inputFilePath1);
+        List<FileFilterConfig> fileFilterConfigList = new ArrayList<>();
+        FileFilterConfig fileFilterConfig = FileFilterConfig.builder()
+                .range(FileFileterRangeEnum.FILE_NAME.getValue())
+                .rule(FileFilterRuleEnum.CONTAINS.getValue())
+                .value("Base")
+                .build();
+        fileFilterConfigList.add(fileFilterConfig);
+        fileinfoConfig1.setFiles(fileFilterConfigList);
+
+        TemplateMakerFileConfig.FileinfoConfig fileinfoConfig2 = new TemplateMakerFileConfig.FileinfoConfig();
+        fileinfoConfig2.setPath(inputFilePath2);
+        templateMakerFileConfig.setFiles(Arrays.asList(fileinfoConfig1, fileinfoConfig2));
+
+        long id = makeTemplate(meta, originProjectPath, templateMakerFileConfig, modelInfo, searchStr, 1738803991506710528L);
         System.out.println(id);
     }
 
@@ -58,7 +80,7 @@ public class TemplateMaker {
      * @param id 模板的包名
      * @return 返回生成模板的包名
      */
-    public static long makeTemplate(Meta newMeta, String originProjectPath, List<String> inputFilePathList, Meta.ModelConfig.ModelInfo modelInfo, String searchStr, Long id) {
+    public static long makeTemplate(Meta newMeta, String originProjectPath, TemplateMakerFileConfig templateMakerFileConfig, Meta.ModelConfig.ModelInfo modelInfo, String searchStr, Long id) {
 
         if (id == null) {
             id = IdUtil.getSnowflakeNextId();
@@ -83,23 +105,26 @@ public class TemplateMaker {
         sourceRootPath = StrUtil.replace(sourceRootPath, "\\", "/");
 
         ArrayList<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>();
-        for (String inputFilePath : inputFilePathList) {
-            //二 使用字符串替换生成模板文件
-            String inputFileAbsolutePath = sourceRootPath + File.separator + inputFilePath;
+        //增加使用过滤器
+        for (TemplateMakerFileConfig.FileinfoConfig fileinfoConfig : templateMakerFileConfig.getFiles()) {
+            String inputFilePath = fileinfoConfig.getPath();
+            //如果传过来的是相对路径就转换成绝对路径
+            if (!inputFilePath.startsWith(sourceRootPath)) {
+                //二 使用字符串替换生成模板文件
+                inputFilePath = sourceRootPath + File.separator + inputFilePath;
+            }
 
-            //如果传过来的是目录
-            if (FileUtil.isDirectory(inputFileAbsolutePath)) {
-                for (File file : FileUtil.loopFiles(inputFileAbsolutePath)) {
-                    //生成单个文件的方法
-                    Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, file);
-                    newFileInfoList.add(fileInfo);
-                }
-            } else {
-                //生成单个文件的方法
-                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, new File(inputFileAbsolutePath));
+            //文件过滤
+            List<FileFilterConfig> fileinfoConfigsFiles = fileinfoConfig.getFiles();
+            List<File> files = FileFilter.doFilter(fileinfoConfigsFiles, inputFilePath);
+            for (File file : files) {
+                //生成单个文件
+                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(modelInfo, searchStr, sourceRootPath, file);
                 newFileInfoList.add(fileInfo);
             }
         }
+
+
         //生成配置文件  json字符串
         String metaOutputPath = sourceRootPath + File.separator + "meta.json";
         //非首次制作  在mate.json模板的基础上继续添加
