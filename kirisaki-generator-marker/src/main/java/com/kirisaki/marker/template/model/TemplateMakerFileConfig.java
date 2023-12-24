@@ -10,12 +10,27 @@ import java.util.List;
  */
 @Data
 public class TemplateMakerFileConfig {
-    private List<FileinfoConfig> files;
+    private List<FileInfoConfig> files;
+    //分组
+    private FileGroupConfig fileGroupConfig;
 
+    /**
+     * 文件信息配置类
+     */
     @Data
     @NoArgsConstructor
-    public static class FileinfoConfig {
+    public static class FileInfoConfig {
         private String path;
         private List<FileFilterConfig> files;
+    }
+
+    /**
+     * 文件分组配置类
+     */
+    @Data
+    public static class FileGroupConfig {
+        private String condition;
+        private String groupKey;
+        private String groupName;
     }
 }
