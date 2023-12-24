@@ -272,7 +272,7 @@ public class TemplateMaker {
                 .collect(Collectors.toList());
         resultList.addAll(new ArrayList<>(noGroupFileInfoList.stream()
                 .collect(
-                        Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, fileinfo -> fileinfo, (o1, o2) -> o2)
+                        Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, o -> o, (e, r) -> r)
                 )
                 .values()));
         return resultList;
