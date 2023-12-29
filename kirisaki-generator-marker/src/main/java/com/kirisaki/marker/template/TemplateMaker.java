@@ -138,7 +138,8 @@ public class TemplateMaker {
         }
 
         //生成配置文件  json字符串
-        String metaOutputPath = sourceRootPath + File.separator + "meta.json";
+        //修改meta.json生成路径, 防止meta.json被扫描到
+        String metaOutputPath = templatePath + File.separator + "meta.json";
         //非首次制作  在mate.json模板的基础上继续添加
         if (FileUtil.exist(metaOutputPath)) {
             //通过fileutils将文件中的内容读取出来
