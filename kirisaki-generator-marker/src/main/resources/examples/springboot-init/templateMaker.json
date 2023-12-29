@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "meta": {
+    "name": "kirisaki-generate",
+    "description": "代码生成器"
+  },
+  "originProjectPath": "../../../kisirsaki-generator-demo-project/springboot-init"
+}
