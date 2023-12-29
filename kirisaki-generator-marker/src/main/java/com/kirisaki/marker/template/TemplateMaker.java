@@ -117,6 +117,12 @@ public class TemplateMaker {
         return id;
     }
 
+    /**
+     * 获取的模型参数信息列表
+     *
+     * @param templateMakerModelConfig
+     * @return
+     */
     private static List<Meta.ModelConfig.ModelInfo> getModelInfoList(TemplateMakerModelConfig templateMakerModelConfig) {
         List<Meta.ModelConfig.ModelInfo> newModelInfoList = new ArrayList<>();
         //判空
@@ -160,10 +166,17 @@ public class TemplateMaker {
         return newModelInfoList;
     }
 
+    /**
+     * 制作文件模板列表
+     * @param templateMakerFileConfig
+     * @param templateMakerModelConfig
+     * @param sourceRootPath
+     * @return
+     */
     private static List<Meta.FileConfig.FileInfo> makeFileTemplates(TemplateMakerFileConfig templateMakerFileConfig, TemplateMakerModelConfig templateMakerModelConfig, String sourceRootPath) {
 
         ArrayList<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>();
-        //对象为空时的判断
+        //如果不需要生成文件对象
         if (templateMakerFileConfig == null) {
             return newFileInfoList;
         }
@@ -191,7 +204,7 @@ public class TemplateMaker {
 
             for (File file : fileList) {
                 //生成单个文件
-                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(templateMakerModelConfig, sourceRootPath, file);
+                Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(templateMakerModelConfig, sourceRootPath, file,fileinfoConfig);
                 newFileInfoList.add(fileInfo);
             }
         }
@@ -226,7 +239,7 @@ public class TemplateMaker {
      * @param inputFile                需要生成的模板文件
      * @return 返回生成的fileInfo信息
      */
-    private static Meta.FileConfig.FileInfo makeFileTemplate(TemplateMakerModelConfig templateMakerModelConfig, String sourceRootPath, File inputFile) {
+    private static Meta.FileConfig.FileInfo makeFileTemplate(TemplateMakerModelConfig templateMakerModelConfig, String sourceRootPath, File inputFile, TemplateMakerFileConfig.FileInfoConfig fileInfoConfig) {
 
         String fileInputAbsolutePath = inputFile.getAbsolutePath().replace("\\", "/");
         String fileOutputAbsolutePath = fileInputAbsolutePath + ".ftl";
@@ -271,6 +284,7 @@ public class TemplateMaker {
         fileInfo.setOutputPath(fileInputPath);
         fileInfo.setType(FileTypeEnum.FILE.getValue());
         fileInfo.setGenerateType(FileGenerateEnum.DYNAMIC.getValue());
+        fileInfo.setCondition(fileInfoConfig.getCondition());
         //判断是否有需要替换的内容
         boolean contentEquals = newFileContent.equals(fileContent);
         //如果不存在模板文件
