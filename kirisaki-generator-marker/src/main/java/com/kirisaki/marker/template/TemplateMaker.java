@@ -104,8 +104,13 @@ public class TemplateMaker {
 
             //文件过滤
             List<FileFilterConfig> fileinfoConfigsFiles = fileinfoConfig.getFiles();
-            List<File> files = FileFilter.doFilter(fileinfoConfigsFiles, inputFilePath);
-            for (File file : files) {
+            List<File> fileList = FileFilter.doFilter(fileinfoConfigsFiles, inputFilePath);
+            //修改bug - 防止非首次生成时扫描到.ftl模板文件
+            fileList = fileList.stream()
+                    .filter(file -> !file.getAbsolutePath().endsWith(".ftl"))
+                    .collect(Collectors.toList());
+
+            for (File file : fileList) {
                 //生成单个文件
                 Meta.FileConfig.FileInfo fileInfo = makeFileTemplate(templateMakerModelConfig, sourceRootPath, file);
                 newFileInfoList.add(fileInfo);
@@ -143,6 +148,7 @@ public class TemplateMaker {
             newMeta = oldMeta;
             //追加配置参数
             List<Meta.FileConfig.FileInfo> fileInfoList = newMeta.getFileConfig().getFiles();
+            //修改bug- 生成时也会扫描
             fileInfoList.addAll(newFileInfoList);
             List<Meta.ModelConfig.ModelInfo> modelInfoList = newMeta.getModelConfig().getModels();
             modelInfoList.addAll(newModelInfoList);
