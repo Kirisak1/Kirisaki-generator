@@ -10,10 +10,7 @@ import cn.hutool.json.JSONUtil;
 import com.kirisaki.marker.meta.Meta;
 import com.kirisaki.marker.meta.enums.FileGenerateEnum;
 import com.kirisaki.marker.meta.enums.FileTypeEnum;
-import com.kirisaki.marker.template.model.FileFilterConfig;
-import com.kirisaki.marker.template.model.TemplateMakerConfig;
-import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
-import com.kirisaki.marker.template.model.TemplateMakerModelConfig;
+import com.kirisaki.marker.template.model.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +34,7 @@ public class TemplateMaker {
                                     String originProjectPath,
                                     TemplateMakerFileConfig templateMakerFileConfig,
                                     TemplateMakerModelConfig templateMakerModelConfig,
+                                    TemplateMakerOutputConfig templateMakerOutputConfig,
                                     Long id) {
         if (id == null) {
             id = IdUtil.getSnowflakeNextId();
@@ -56,7 +54,7 @@ public class TemplateMaker {
         //一 输入基本信息
         // 输入文件信息
         //非首次生成后不需要再传 originProjectPath
-        String sourceRootPath = FileUtil.loopFiles(new File(templatePath),1,null)
+        String sourceRootPath = FileUtil.loopFiles(new File(templatePath), 1, null)
                 .stream()
                 .filter(File::isDirectory)
                 .findFirst()
@@ -106,6 +104,12 @@ public class TemplateMaker {
             List<Meta.ModelConfig.ModelInfo> modelInfoList = new ArrayList<>();
             modelConfig.setModels(modelInfoList);
             modelInfoList.addAll(newModelInfoList);
+        }
+        //已经在分组文件中出现的文件
+        if (templateMakerOutputConfig != null) {
+            if (templateMakerOutputConfig.isRemoveGroupFilesFromRoot()) {
+                newMeta.getFileConfig().setFiles(TemplateMakerUtils.removeGroupFilesFromRoot(newMeta.getFileConfig().getFiles()));
+            }
         }
         //更新元信息 toJsonPrettyStr 转换成格式化后的json字符串  toJsonStr 不会格式化
         FileUtil.writeUtf8String(JSONUtil.toJsonPrettyStr(newMeta), metaOutputPath);
@@ -178,7 +182,7 @@ public class TemplateMaker {
             }
 
             //文件过滤
-            List<FileFilterConfig> fileinfoConfigsFiles = fileinfoConfig.getFiles();
+            List<FileFilterConfig> fileinfoConfigsFiles = fileinfoConfig.getFilterConfigList();
             List<File> fileList = FileFilter.doFilter(fileinfoConfigsFiles, inputFilePath);
             //修改bug - 防止非首次生成时扫描到.ftl模板文件
             fileList = fileList.stream()
@@ -374,6 +378,7 @@ public class TemplateMaker {
         String originProjectPath = templateMakerConfig.getOriginProjectPath();
         TemplateMakerFileConfig templateMakerFileConfig = templateMakerConfig.getFileConfig();
         TemplateMakerModelConfig templateMakerModelConfig = templateMakerConfig.getModelConfig();
-        return makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, id);
+        TemplateMakerOutputConfig outputConfig = templateMakerConfig.getOutputConfig();
+        return makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, outputConfig, id);
     }
 }

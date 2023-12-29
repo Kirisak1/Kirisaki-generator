@@ -44,8 +44,8 @@ public class TemplateMakerTest {
         List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1);
         templateMakerModelConfig.setModels(modelInfoConfigList);
 
-        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1738803991506710528L);
-        System.out.println(id);
+        // long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1738803991506710528L);
+        // System.out.println(id);
     }
     @Test
     public void testMakeTemplateBug2() {
@@ -73,8 +73,8 @@ public class TemplateMakerTest {
         List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1);
         templateMakerModelConfig.setModels(modelInfoConfigList);
 
-        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1738803991506710528L);
-        System.out.println(id);
+        // long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1738803991506710528L);
+        // System.out.println(id);
     }
     @Test
     public void testMakeTemplateWithJSOn(){
@@ -93,6 +93,10 @@ public class TemplateMakerTest {
          configStr = ResourceUtil.readUtf8Str(rootPath+"templateMaker1.json");
          templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
          TemplateMaker.makeTemplate(templateMakerConfig);
+
+        configStr = ResourceUtil.readUtf8Str(rootPath+"templateMaker2.json");
+        templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
+        TemplateMaker.makeTemplate(templateMakerConfig);
         System.out.println(id);
     }
 }

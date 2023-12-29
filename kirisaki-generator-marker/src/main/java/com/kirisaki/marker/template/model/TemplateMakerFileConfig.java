@@ -21,7 +21,7 @@ public class TemplateMakerFileConfig {
     @NoArgsConstructor
     public static class FileInfoConfig {
         private String path;
-        private List<FileFilterConfig> files;
+        private List<FileFilterConfig> filterConfigList;
     }
 
     /**
