@@ -10,93 +10,22 @@ import cn.hutool.json.JSONUtil;
 import com.kirisaki.marker.meta.Meta;
 import com.kirisaki.marker.meta.enums.FileGenerateEnum;
 import com.kirisaki.marker.meta.enums.FileTypeEnum;
-import com.kirisaki.marker.template.enums.FileFileterRangeEnum;
-import com.kirisaki.marker.template.enums.FileFilterRuleEnum;
 import com.kirisaki.marker.template.model.FileFilterConfig;
 import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
 import com.kirisaki.marker.template.model.TemplateMakerModelConfig;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * 模板制作类
  */
 public class TemplateMaker {
-    public static void main(String[] args) {
-        //封装前端传参
-        Meta meta = new Meta();
-        meta.setName("kirisaki-generate");
-        meta.setDescription("kk代码生成器");
-
-        String projectPath = System.getProperty("user.dir");
-        String originProjectPath = new File(projectPath).getParent() + File.separator + "kisirsaki-generator-demo-project/springboot-init";
-        // String inputFilePath = "src/main/java/com/yupi/springbootinit";
-
-        //模型参数(首次)
-        Meta.ModelConfig.ModelInfo modelInfo = new Meta.ModelConfig.ModelInfo();
-        // modelInfo.setFieldName("outputText");
-        // modelInfo.setType("String");
-        // modelInfo.setDefaultValue("sum =");
-
-        //替换变量(首次)
-
-        //替换变量(第二次)
-        String inputFilePath1 = "src/main/java/com/yupi/springbootinit/common";
-        String inputFilePath2 = "src/main/resources/application.yml";
-
-        //模型组配置
-        TemplateMakerModelConfig templateMakerModelConfig = new TemplateMakerModelConfig();
-        TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = new TemplateMakerModelConfig.ModelGroupConfig();
-        modelGroupConfig.setGroupKey("test");
-        modelGroupConfig.setGroupName("数据库配置");
-        templateMakerModelConfig.setModelGroupConfig(modelGroupConfig);
-
-        //模型配置
-        TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig1 = new TemplateMakerModelConfig.ModelInfoConfig();
-        modelInfoConfig1.setFieldName("test");
-        modelInfoConfig1.setType("String");
-        modelInfoConfig1.setDefaultValue("jdbc:mysql://localhost:3306/my_db");
-        modelInfoConfig1.setReplaceText("jdbc:mysql://localhost:3306/my_db");
-
-        TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig2 = new TemplateMakerModelConfig.ModelInfoConfig();
-        modelInfoConfig2.setFieldName("username");
-        modelInfoConfig2.setType("String");
-        modelInfoConfig2.setDefaultValue("root");
-        modelInfoConfig2.setReplaceText("root");
-        List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1, modelInfoConfig2);
-        templateMakerModelConfig.setModels(modelInfoConfigList);
-
-        TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
-
-
-        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig1 = new TemplateMakerFileConfig.FileInfoConfig();
-        fileInfoConfig1.setPath(inputFilePath1);
-        List<FileFilterConfig> fileFilterConfigList = new ArrayList<>();
-        FileFilterConfig fileFilterConfig = FileFilterConfig.builder()
-                .range(FileFileterRangeEnum.FILE_NAME.getValue())
-                .rule(FileFilterRuleEnum.CONTAINS.getValue())
-                .value("Base")
-                .build();
-        fileFilterConfigList.add(fileFilterConfig);
-        fileInfoConfig1.setFiles(fileFilterConfigList);
-
-        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig2 = new TemplateMakerFileConfig.FileInfoConfig();
-        fileInfoConfig2.setPath(inputFilePath2);
-        templateMakerFileConfig.setFiles(Arrays.asList(fileInfoConfig1, fileInfoConfig2));
-
-        //分组测试代码
-        TemplateMakerFileConfig.FileGroupConfig fileGroupConfig = new TemplateMakerFileConfig.FileGroupConfig();
-        fileGroupConfig.setCondition("outputText");
-        fileGroupConfig.setGroupKey("test");
-        fileGroupConfig.setGroupName("测试分组");
-        templateMakerFileConfig.setFileGroupConfig(fileGroupConfig);
-
-        long id = makeTemplate(meta, originProjectPath, templateMakerFileConfig,templateMakerModelConfig, 1738803991506710528L);
-        System.out.println(id);
-    }
 
     /**
      * 生成模板
@@ -136,7 +65,7 @@ public class TemplateMaker {
 
             groupModelInfo.setModels(inputModelInfoList);
             newModelInfoList.add(groupModelInfo);
-        }else {
+        } else {
             newModelInfoList.addAll(inputModelInfoList);
         }
 
@@ -245,9 +174,9 @@ public class TemplateMaker {
     /**
      * 生成单个文件模板的方法
      *
-     * @param templateMakerModelConfig      制作模板配置参数
-     * @param sourceRootPath 目标源文件目录
-     * @param inputFile      需要生成的模板文件
+     * @param templateMakerModelConfig 制作模板配置参数
+     * @param sourceRootPath           目标源文件目录
+     * @param inputFile                需要生成的模板文件
      * @return 返回生成的fileInfo信息
      */
     private static Meta.FileConfig.FileInfo makeFileTemplate(TemplateMakerModelConfig templateMakerModelConfig, String sourceRootPath, File inputFile) {
@@ -260,7 +189,9 @@ public class TemplateMaker {
 
         //如果非首次制作就在ftl的基础上继续修改
         String fileContent;
-        if (FileUtil.exist(fileOutputAbsolutePath)) {
+        //修改同配置下生成多次文件,文件的生成方便由静态变为动态问题
+        boolean hasTemplateFile = FileUtil.exist(fileOutputAbsolutePath);
+        if (hasTemplateFile) {
             fileContent = FileUtil.readUtf8String(fileOutputAbsolutePath);
         } else {
             fileContent = FileUtil.readUtf8String(fileInputAbsolutePath);
@@ -273,35 +204,38 @@ public class TemplateMaker {
         List<TemplateMakerModelConfig.ModelInfoConfig> models = templateMakerModelConfig.getModels();
         TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = templateMakerModelConfig.getModelGroupConfig();
 
-            for (TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig : models) {
-                //使用占位符来替换  String. format() API的使用   , 避免使用魔法值, 能够引用的地方一定要引用
-                if (modelGroupConfig != null) {
-                    replacement = String.format("${%s.%s}",modelGroupConfig.getGroupKey() ,modelInfoConfig.getFieldName());
-                }else {
-                    replacement = String.format("${%s}", modelInfoConfig.getFieldName());
-                }
-                String searchStr = modelInfoConfig.getReplaceText();
-                //使用hutool封装好的API, 来减少对某些情况的判断
-                newFileContent = StrUtil.replace(newFileContent, searchStr, replacement);
-
+        for (TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig : models) {
+            //使用占位符来替换  String. format() API的使用   , 避免使用魔法值, 能够引用的地方一定要引用
+            if (modelGroupConfig != null) {
+                replacement = String.format("${%s.%s}", modelGroupConfig.getGroupKey(), modelInfoConfig.getFieldName());
+            } else {
+                replacement = String.format("${%s}", modelInfoConfig.getFieldName());
             }
+            String searchStr = modelInfoConfig.getReplaceText();
+            //使用hutool封装好的API, 来减少对某些情况的判断
+            newFileContent = StrUtil.replace(newFileContent, searchStr, replacement);
 
-
-
+        }
 
         //文件配置信息
         Meta.FileConfig.FileInfo fileInfo = new Meta.FileConfig.FileInfo();
         fileInfo.setInputPath(fileInputPath);
         fileInfo.setOutputPath(fileOutputPath);
         fileInfo.setType(FileTypeEnum.FILE.getValue());
-
+        fileInfo.setGenerateType(FileGenerateEnum.DYNAMIC.getValue());
         //判断是否有需要替换的内容
-        if (newFileContent.equals(fileContent)) {
-            fileInfo.setOutputPath(fileInputPath);
-            fileInfo.setGenerateType(FileGenerateEnum.STATIC.getValue());
-        } else {
-            fileInfo.setGenerateType(FileGenerateEnum.DYNAMIC.getValue());
-            //输出ftl模板文件   只有需要生成模板文件的才需要写入, 不需要的就可以不写
+        boolean contentEquals = newFileContent.equals(fileContent);
+        //如果不存在模板文件
+        if (!hasTemplateFile) {
+            if (contentEquals) {
+                fileInfo.setOutputPath(fileInputPath);
+                fileInfo.setGenerateType(FileGenerateEnum.STATIC.getValue());
+            } else {
+                //输出ftl模板文件   只有需要生成模板文件的才需要写入, 不需要的就可以不写
+                FileUtil.writeUtf8String(newFileContent, fileOutputAbsolutePath);
+            }
+            //存在模板文件     内容变更的情况下
+        } else if (!contentEquals) {
             FileUtil.writeUtf8String(newFileContent, fileOutputAbsolutePath);
         }
         return fileInfo;
