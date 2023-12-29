@@ -1,6 +1,9 @@
 package com.kirisaki.marker.template;
 
+import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.json.JSONUtil;
 import com.kirisaki.marker.meta.Meta;
+import com.kirisaki.marker.template.model.TemplateMakerConfig;
 import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
 import com.kirisaki.marker.template.model.TemplateMakerModelConfig;
 import org.junit.Test;
@@ -71,6 +74,13 @@ public class TemplateMakerTest {
         templateMakerModelConfig.setModels(modelInfoConfigList);
 
         long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1738803991506710528L);
+        System.out.println(id);
+    }
+    @Test
+    public void testMakeTemplateWithJSOn(){
+        String configStr = ResourceUtil.readUtf8Str("templateMaker.json");
+        TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
+        long id = TemplateMaker.makeTemplate(templateMakerConfig);
         System.out.println(id);
     }
 }

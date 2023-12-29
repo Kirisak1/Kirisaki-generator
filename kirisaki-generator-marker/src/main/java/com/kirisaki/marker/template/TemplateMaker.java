@@ -11,6 +11,7 @@ import com.kirisaki.marker.meta.Meta;
 import com.kirisaki.marker.meta.enums.FileGenerateEnum;
 import com.kirisaki.marker.meta.enums.FileTypeEnum;
 import com.kirisaki.marker.template.model.FileFilterConfig;
+import com.kirisaki.marker.template.model.TemplateMakerConfig;
 import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
 import com.kirisaki.marker.template.model.TemplateMakerModelConfig;
 
@@ -83,7 +84,7 @@ public class TemplateMaker {
         if (!FileUtil.exist(new File(templatePath))) {
             FileUtil.mkdir(new File(templatePath));
             //如果不存在才复制
-            FileUtil.copy(new File(originProjectPath), new File(templatePath), true);
+            FileUtil.copy(originProjectPath, templatePath, true);
         }
 
         //一 输入基本信息
@@ -326,4 +327,18 @@ public class TemplateMaker {
         return resultList;
     }
 
+    /**
+     * 制作模板
+     *
+     * @param templateMakerConfig 前端传过来的工具类
+     * @return id
+     */
+    public static long makeTemplate(TemplateMakerConfig templateMakerConfig) {
+        Long id = templateMakerConfig.getId();
+        Meta meta = templateMakerConfig.getMeta();
+        String originProjectPath = templateMakerConfig.getOriginProjectPath();
+        TemplateMakerFileConfig templateMakerFileConfig = templateMakerConfig.getFileConfig();
+        TemplateMakerModelConfig templateMakerModelConfig = templateMakerConfig.getModelConfig();
+        return makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, id);
+    }
 }

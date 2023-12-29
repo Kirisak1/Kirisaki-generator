@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "name": "kirisaki-generate",
+    "description": "代码生成器"
+  },
+  "originProjectPath": "../../../kisirsaki-generator-demo-project/springboot-init",
+  "fileConfig": {
+    "files": [
+      {
+        "path": "src/main/java/com/yupi/springbootinit/common"
+      }
+    ]
+  },
+  "modelConfig": {
+    "models": [
+      {
+        "fieldName":"className",
+        "type": "String",
+        "defaultValue":"true",
+        "replaceText": "BaseResponse"
+      }
+    ]
+  }
+}
