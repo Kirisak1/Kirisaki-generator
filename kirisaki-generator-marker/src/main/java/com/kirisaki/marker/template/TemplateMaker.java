@@ -225,8 +225,9 @@ public class TemplateMaker {
 
         //文件配置信息
         Meta.FileConfig.FileInfo fileInfo = new Meta.FileConfig.FileInfo();
-        fileInfo.setInputPath(fileInputPath);
-        fileInfo.setOutputPath(fileOutputPath);
+        // bug 修复- 文件输入输出路径翻转
+        fileInfo.setInputPath(fileOutputPath);
+        fileInfo.setOutputPath(fileInputPath);
         fileInfo.setType(FileTypeEnum.FILE.getValue());
         fileInfo.setGenerateType(FileGenerateEnum.DYNAMIC.getValue());
         //判断是否有需要替换的内容
@@ -234,7 +235,8 @@ public class TemplateMaker {
         //如果不存在模板文件
         if (!hasTemplateFile) {
             if (contentEquals) {
-                fileInfo.setOutputPath(fileInputPath);
+                // 输入路径没有.ftl后缀
+                fileInfo.setInputPath(fileInputPath);
                 fileInfo.setGenerateType(FileGenerateEnum.STATIC.getValue());
             } else {
                 //输出ftl模板文件   只有需要生成模板文件的才需要写入, 不需要的就可以不写
@@ -268,7 +270,7 @@ public class TemplateMaker {
             List<Meta.FileConfig.FileInfo> tempFileInfoList = entry.getValue();
             List<Meta.FileConfig.FileInfo> newFileInfoList = new ArrayList<>(tempFileInfoList.stream()
                     .flatMap(fileInfo -> fileInfo.getFiles().stream())
-                    .collect(Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, o -> o, (e, r) -> r)).values());
+                    .collect(Collectors.toMap(Meta.FileConfig.FileInfo::getOutputPath, o -> o, (e, r) -> r)).values());
             //使用新group配置
             Meta.FileConfig.FileInfo newFileInfo = CollUtil.getLast(tempFileInfoList);
             newFileInfo.setFiles(newFileInfoList);
@@ -283,7 +285,7 @@ public class TemplateMaker {
                 .collect(Collectors.toList());
         resultList.addAll(new ArrayList<>(noGroupFileInfoList.stream()
                 .collect(
-                        Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, o -> o, (e, r) -> r)
+                        Collectors.toMap(Meta.FileConfig.FileInfo::getOutputPath, o -> o, (e, r) -> r)
                 )
                 .values()));
         return resultList;
