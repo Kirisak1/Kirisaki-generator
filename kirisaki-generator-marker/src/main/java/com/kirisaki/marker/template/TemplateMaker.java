@@ -16,7 +16,6 @@ import com.kirisaki.marker.template.model.TemplateMakerFileConfig;
 import com.kirisaki.marker.template.model.TemplateMakerModelConfig;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,10 +53,15 @@ public class TemplateMaker {
             //如果不存在才复制
             FileUtil.copy(originProjectPath, templatePath, true);
         }
-
         //一 输入基本信息
         // 输入文件信息
-        String sourceRootPath = templatePath + File.separator + FileUtil.getLastPathEle(Paths.get(originProjectPath)).toString();
+        //非首次生成后不需要再传 originProjectPath
+        String sourceRootPath = FileUtil.loopFiles(new File(templatePath),1,null)
+                .stream()
+                .filter(File::isDirectory)
+                .findFirst()
+                .orElseThrow(RuntimeException::new)
+                .getAbsolutePath();
         //该方法在win系统下得到的路径有问题
         sourceRootPath = StrUtil.replace(sourceRootPath, "\\", "/");
 
