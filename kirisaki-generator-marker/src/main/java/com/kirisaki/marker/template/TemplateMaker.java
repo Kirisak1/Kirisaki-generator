@@ -143,22 +143,14 @@ public class TemplateMaker {
                 })
                 .collect(Collectors.toList());
 
-
         TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = templateMakerModelConfig.getModelGroupConfig();
         //如果是模型分组
         if (modelGroupConfig != null) {
-            String condition = modelGroupConfig.getCondition();
-            String groupKey = modelGroupConfig.getGroupKey();
-            String groupName = modelGroupConfig.getGroupName();
 
             Meta.ModelConfig.ModelInfo groupModelInfo = new Meta.ModelConfig.ModelInfo();
-
-            groupModelInfo.setGroupKey(groupKey);
-            groupModelInfo.setGroupName(groupName);
+            BeanUtil.copyProperties(modelGroupConfig, groupModelInfo);
             groupModelInfo.setModels(inputModelInfoList);
-            groupModelInfo.setCondition(condition);
 
-            groupModelInfo.setModels(inputModelInfoList);
             newModelInfoList.add(groupModelInfo);
         } else {
             newModelInfoList.addAll(inputModelInfoList);
