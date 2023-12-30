@@ -13,10 +13,12 @@ public class ConfigCommand implements Runnable {
     @Override
     public void run() {
         Field[] fields = ReflectUtil.getFields(DataModel.class);
+            System.out.println("查看参数信息");
         for (Field field : fields) {
             String name = field.getName();
             Class<?> type = field.getType();
-            System.out.println(type +"\t"+name);
+            System.out.println("字段类型:"+type +"\n"+"字段名称"+name);
+            System.out.println("------------------------------------");
         }
     }
 }

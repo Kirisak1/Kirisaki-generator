@@ -39,7 +39,8 @@ public class MetaManager {
      */
     private static Meta initeMeta() {
         // 读取meta.json文件，并将其转换为字符串
-        String meataJson = ResourceUtil.readUtf8Str("meta.json");
+        // String meataJson = ResourceUtil.readUtf8Str("meta.json");
+        String meataJson = ResourceUtil.readUtf8Str("springboot-init-meta.json");
         Meta newMeta = JSONUtil.toBean(meataJson, Meta.class);
 
         //校验参数

@@ -16,8 +16,8 @@ ${indent}private ${modelInfo.type} ${modelInfo.fieldName}<#if modelInfo.defaultV
 <#--生成调用指令-->
 <#macro generateCommand indent modelInfo>
 ${indent}System.out.println("输入${modelInfo.groupName}配置");
-${indent}CommandLine commandLine = new CommandLine(${modelInfo.type}Command.class);
-${indent}commandLine.execute(${modelInfo.allArgsStr});
+${indent}CommandLine ${modelInfo.groupKey}commandLine = new CommandLine(${modelInfo.type}Command.class);
+${indent}${modelInfo.groupKey}commandLine.execute(${modelInfo.allArgsStr});
 </#macro>
 
 
@@ -57,6 +57,8 @@ public class GenerateCommand implements Callable<Integer> {
         if(${modelInfo.condition}){
         <@generateCommand indent="    " modelInfo=modelInfo/>
         }
+    <#else>
+        <@generateCommand indent="    " modelInfo=modelInfo/>
     </#if>
     </#if>
     </#list>

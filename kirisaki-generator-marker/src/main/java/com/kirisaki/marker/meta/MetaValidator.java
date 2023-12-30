@@ -62,7 +62,7 @@ public class MetaValidator {
                 throw new MetaException("model fieldName is null");
             }
             String type = model.getType();
-            StrUtil.blankToDefault(type, ModelTypeEnum.STRING.getValue());
+            type =  StrUtil.blankToDefault(type, ModelTypeEnum.STRING.getValue());
             model.setType(type);
         }
     }
@@ -91,10 +91,10 @@ public class MetaValidator {
             fileConfig.setInputRootPath(".source/" + FileUtil.getLastPathEle(Paths.get(sourceRootPath)).getFileName().toString());
         }
 
-        StrUtil.blankToDefault(outputRootPath, "generated");
+        outputRootPath = StrUtil.blankToDefault(outputRootPath, "generated");
         fileConfig.setOutputRootPath(outputRootPath);
 
-        StrUtil.blankToDefault(type, FileTypeEnum.DIR.getValue());
+        type = StrUtil.blankToDefault(type, FileTypeEnum.DIR.getValue());
         fileConfig.setType(type);
 
         if (CollectionUtil.isEmpty(files)) {
@@ -154,22 +154,22 @@ public class MetaValidator {
         String createTime = meta.getCreateTime();
         //校验
 
-        StrUtil.emptyToDefault(author, "kk");
+        author = StrUtil.emptyToDefault(author, "kk");
         meta.setAuthor(author);
 
-        StrUtil.blankToDefault(name, "my-generator");
+        name = StrUtil.blankToDefault(name, "my-generator");
         meta.setName(name);
 
-        StrUtil.blankToDefault(basePackage, "com.kirisaki");
+        basePackage = StrUtil.blankToDefault(basePackage, "com.kirisaki");
         meta.setBasePackage(basePackage);
 
-        StrUtil.blankToDefault(version, "1.0.0");
+        version = StrUtil.blankToDefault(version, "1.0.0");
         meta.setVersion(version);
 
-        StrUtil.blankToDefault(description, "我的代码生成器");
+        description = StrUtil.blankToDefault(description, "我的代码生成器");
         meta.setDescription(description);
 
-        StrUtil.blankToDefault(createTime, DateUtil.today());
+        createTime = StrUtil.blankToDefault(createTime, DateUtil.today());
         meta.setCreateTime(createTime);
     }
 }
