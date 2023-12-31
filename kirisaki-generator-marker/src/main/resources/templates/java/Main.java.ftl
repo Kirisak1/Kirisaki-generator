@@ -15,17 +15,23 @@ public class Main {
         //这里作为调用的接口,为什么不直接在那个类里做调用接口?
         CommandExecutor commandExecutor = new CommandExecutor();
         //动态添加元素
-        boolean contains = ArrayUtil.contains(args, "generate");
+        boolean contains = ArrayUtil.contains(args, "generate") && !ArrayUtil.contains(args, "--help");
         ArrayList<String> strings = new ArrayList<>(Arrays.asList(args));
         if (contains) {
             Field[] fields = ReflectUtil.getFields(GenerateCommand.class);
             for (Field field : fields) {
                 Option annotation = field.getAnnotation(Option.class);
+                if (annotation == null) {
+                continue;
+                }
                 String[] names = annotation.names();
                  Boolean flag = false;
                 for (String name : names) {
-                    if (ArrayUtil.contains(args, name)) {
-                        flag=true;
+                    String exist = Arrays.stream(args).filter(arg -> arg.contains(name)).findFirst().orElseGet( () -> {
+                        return null;
+                });
+                    if (exist != null) {
+                        flag = true;
                         break;
                     }
                 }
