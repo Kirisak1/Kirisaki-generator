@@ -15,6 +15,7 @@ export default [
     routes: [
       { path: '/admin', redirect: '/admin/user' },
       { icon: 'table', path: '/admin/user', component: './Admin/User', name: '用户管理' },
+      { icon: 'tools', path: '/admin/generator', component: './Admin/Generator', name: '生成器管理' },
     ],
   },
   { path: '/', redirect: '/welcome' },
