@@ -1,6 +1,6 @@
-﻿import { BACKEND_HOST_LOCAL, BACKEND_HOST_PROD } from '@/constants';
-import type { RequestOptions } from '@@/plugin-request/request';
-import type { RequestConfig } from '@umijs/max';
+﻿import {BACKEND_HOST_LOCAL, BACKEND_HOST_PROD} from '@/constants';
+import type {RequestOptions} from '@@/plugin-request/request';
+import type {RequestConfig} from '@umijs/max';
 
 // 与后端约定的响应数据格式
 interface ResponseStructure {

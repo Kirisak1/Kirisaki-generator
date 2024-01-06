@@ -64,9 +64,9 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" style={{ height: '100%' }} src="/logo.svg" />}
-          title="鱼皮前端万用模板"
-          subTitle={'快速开发属于自己的前端项目'}
+          logo={<img alt="logo" style={{ height: '110%', width: '110%' }} src="/logo.png" />}
+          title="kk代码生成器"
+          subTitle={'能够自己制作或者使用其他人的代码生成器'}
           initialValues={{
             autoLogin: true,
           }}
