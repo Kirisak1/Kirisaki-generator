@@ -39,7 +39,7 @@ const Register: React.FC = () => {
       history.push("/user/login");
       return;
     } catch (error: any) {
-      const defaultLoginFailureMessage = `登录失败，${error.message}`;
+      const defaultLoginFailureMessage = `注册失败，${error.message}`;
       message.error(defaultLoginFailureMessage);
     }
   };
@@ -57,7 +57,7 @@ const Register: React.FC = () => {
           padding: '32px 0',
         }}
       >
-        <LoginForm
+        <LoginForm<API.UserRegisterRequest>
           contentStyle={{
             minWidth: 280,
             maxWidth: '75vw',
@@ -68,6 +68,7 @@ const Register: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
+          //修改登录标签为注册
           submitter={{
             searchConfig: {
               submitText: '注册',
