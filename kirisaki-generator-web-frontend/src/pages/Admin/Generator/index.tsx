@@ -1,6 +1,9 @@
 import CreateModal from '@/pages/Admin/Generator/components/CreateModal';
 import UpdateModal from '@/pages/Admin/Generator/components/UpdateModal';
-import { deleteGenerator, listGeneratorByPage } from '@/services/backend/generatorController';
+import {
+  deleteGeneratorUsingPost,
+  listGeneratorVoByPageUsingPost
+} from '@/services/backend/generatorController';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
@@ -31,7 +34,7 @@ const GeneratorAdminPage: React.FC = () => {
     const hide = message.loading('正在删除');
     if (!row) return true;
     try {
-      await deleteGenerator({
+      await deleteGeneratorUsingPost({
         id: row.id as any,
       });
       hide();
@@ -205,11 +208,12 @@ const GeneratorAdminPage: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
+        //@ts-ignore
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
 
-          const { data, code } = await listGeneratorByPage({
+          const { data, code } = await listGeneratorVoByPageUsingPost({
             ...params,
             sortField,
             sortOrder,

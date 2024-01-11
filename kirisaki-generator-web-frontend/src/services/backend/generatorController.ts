@@ -3,7 +3,7 @@
 import { request } from '@umijs/max';
 
 /** addGenerator POST /api/generator/add */
-export async function addGenerator(
+export async function addGeneratorUsingPost(
   body: API.GeneratorAddRequest,
   options?: { [key: string]: any },
 ) {
@@ -18,7 +18,7 @@ export async function addGenerator(
 }
 
 /** deleteGenerator POST /api/generator/delete */
-export async function deleteGenerator(
+export async function deleteGeneratorUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
 ) {
@@ -33,7 +33,7 @@ export async function deleteGenerator(
 }
 
 /** editGenerator POST /api/generator/edit */
-export async function editGenerator(
+export async function editGeneratorUsingPost(
   body: API.GeneratorEditRequest,
   options?: { [key: string]: any },
 ) {
@@ -48,7 +48,7 @@ export async function editGenerator(
 }
 
 /** getGeneratorVOById GET /api/generator/get/vo */
-export async function getGeneratorVoById(
+export async function getGeneratorVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getGeneratorVOByIdUsingGETParams,
   options?: { [key: string]: any },
@@ -63,7 +63,7 @@ export async function getGeneratorVoById(
 }
 
 /** listGeneratorByPage POST /api/generator/list/page */
-export async function listGeneratorByPage(
+export async function listGeneratorByPageUsingPost(
   body: API.GeneratorQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -78,7 +78,7 @@ export async function listGeneratorByPage(
 }
 
 /** listGeneratorVOByPage POST /api/generator/list/page/vo */
-export async function listGeneratorVoByPage(
+export async function listGeneratorVoByPageUsingPost(
   body: API.GeneratorQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -93,7 +93,7 @@ export async function listGeneratorVoByPage(
 }
 
 /** listMyGeneratorVOByPage POST /api/generator/my/list/page/vo */
-export async function listMyGeneratorVoByPage(
+export async function listMyGeneratorVoByPageUsingPost(
   body: API.GeneratorQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -108,7 +108,7 @@ export async function listMyGeneratorVoByPage(
 }
 
 /** updateGenerator POST /api/generator/update */
-export async function updateGenerator(
+export async function updateGeneratorUsingPost(
   body: API.GeneratorUpdateRequest,
   options?: { [key: string]: any },
 ) {
