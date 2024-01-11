@@ -288,6 +288,11 @@ declare namespace API {
     total?: string;
   };
 
+  type testDownloadFileUsingGETParams = {
+    /** filePath */
+    filePath?: string;
+  };
+
   type uploadFileUsingPOSTParams = {
     biz?: string;
   };
