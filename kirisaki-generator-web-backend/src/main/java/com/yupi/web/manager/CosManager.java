@@ -1,8 +1,9 @@
 package com.yupi.web.manager;
 
 import com.qcloud.cos.COSClient;
-import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.model.PutObjectResult;
+import com.qcloud.cos.exception.CosClientException;
+import com.qcloud.cos.exception.CosServiceException;
+import com.qcloud.cos.model.*;
 import com.yupi.web.config.CosClientConfig;
 import org.springframework.stereotype.Component;
 
@@ -48,5 +49,18 @@ public class CosManager {
         PutObjectRequest putObjectRequest = new PutObjectRequest(cosClientConfig.getBucket(), key,
                 file);
         return cosClient.putObject(putObjectRequest);
+    }
+
+    /**
+     * 文件下载
+     *
+     * @param key 唯一键
+     * @return
+     * @throws CosClientException
+     * @throws CosServiceException
+     */
+    public COSObject getObject(String  key) {
+        GetObjectRequest getObjectRequest = new GetObjectRequest(cosClientConfig.getBucket(), key);
+        return cosClient.getObject(getObjectRequest);
     }
 }
