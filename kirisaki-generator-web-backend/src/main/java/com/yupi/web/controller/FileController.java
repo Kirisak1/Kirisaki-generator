@@ -8,7 +8,6 @@ import com.yupi.web.annotation.AuthCheck;
 import com.yupi.web.common.BaseResponse;
 import com.yupi.web.common.ErrorCode;
 import com.yupi.web.common.ResultUtils;
-import com.yupi.web.constant.FileConstant;
 import com.yupi.web.constant.UserConstant;
 import com.yupi.web.exception.BusinessException;
 import com.yupi.web.manager.CosManager;
@@ -137,7 +136,7 @@ public class FileController {
             multipartFile.transferTo(file);
             cosManager.putObject(filepath, file);
             // 返回可访问地址
-            return ResultUtils.success(FileConstant.COS_HOST + filepath);
+            return ResultUtils.success(filepath);
         } catch (Exception e) {
             log.error("file upload error, filepath = " + filepath, e);
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
