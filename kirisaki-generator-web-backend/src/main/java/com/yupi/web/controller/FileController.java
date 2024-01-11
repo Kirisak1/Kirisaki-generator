@@ -84,7 +84,7 @@ public class FileController {
     @PostMapping("/test/upload")
     public BaseResponse<String> testUploadFile(@RequestPart("file") MultipartFile multipartFile) {
         String filename = multipartFile.getOriginalFilename();
-        String filepath = String.format("test/%s", filename);
+        String filepath = String.format("/test/%s", filename);
         File file = null;
         try {
             // 上传文件
