@@ -6,9 +6,9 @@ import java.io.IOException;
 
 /**
  * @author Kirisaki
- * 测试调用
+ * 生成代码生成器压缩包
  */
-public class MainGenerator extends  GenerateTemplate {
+public class ZipGenerator extends  GenerateTemplate {
     /**
      * 通过模板文件模式来定制化相关代码
      * @param outputPath
@@ -17,12 +17,10 @@ public class MainGenerator extends  GenerateTemplate {
      */
     @Override
     protected String buildDist(String outputPath, String sourceCopyDestPath, String jarPath) {
-        System.out.println("不需要打印dist");
-        return "";
+        String distPath = super.buildDist(outputPath, sourceCopyDestPath, jarPath);
+        return  super.buildZip(distPath);
     }
-
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
-        new MainGenerator().doGenerate();
-
+        new ZipGenerator().doGenerate();
     }
 }

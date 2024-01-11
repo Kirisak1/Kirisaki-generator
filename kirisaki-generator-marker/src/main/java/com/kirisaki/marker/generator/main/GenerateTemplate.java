@@ -3,6 +3,7 @@ package com.kirisaki.marker.generator.main;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.kirisaki.marker.generator.GitGenerator;
 import com.kirisaki.marker.generator.JarGenerator;
 import com.kirisaki.marker.generator.ScriptGenerator;
@@ -57,7 +58,7 @@ public abstract class GenerateTemplate {
      * @param sourceCopyDestPath 源复制文件路径
      * @param jarPath jar包路径
      */
-    protected void buildDist(String outputPath, String sourceCopyDestPath, String jarPath) {
+    protected String buildDist(String outputPath, String sourceCopyDestPath, String jarPath) {
         String disOutputPath = outputPath +"-dis";
         String jarInputPath = outputPath + File.separator + jarPath;
         String jarAbsolutePath = disOutputPath + File.separator;
@@ -73,6 +74,7 @@ public abstract class GenerateTemplate {
         String scriptShPath = outputPath + File.separator + "generator.sh";
         FileUtil.copy(scriptPath, disOutputPath, true);
         FileUtil.copy(scriptShPath, disOutputPath, true);
+        return disOutputPath;
     }
 
     /**
@@ -181,5 +183,16 @@ public abstract class GenerateTemplate {
         String sourceCopyDestPath = outputPath + File.separator + ".source";
         FileUtil.copy(sourceRootPath, sourceCopyDestPath, true);
         return sourceCopyDestPath;
+    }
+
+    /**
+     * 生成压缩包
+     * @param outputPath 精简版目录
+     * @return 生成压缩包的地址
+     */
+    protected String buildZip(String outputPath){
+        String zipPath = outputPath + ".zip";
+        ZipUtil.zip(outputPath, zipPath);
+        return zipPath;
     }
 }
