@@ -1,10 +1,12 @@
 package com.yupi.web.controller;
 
 import cn.hutool.core.io.FileUtil;
+import com.yupi.web.annotation.AuthCheck;
 import com.yupi.web.common.BaseResponse;
 import com.yupi.web.common.ErrorCode;
 import com.yupi.web.common.ResultUtils;
 import com.yupi.web.constant.FileConstant;
+import com.yupi.web.constant.UserConstant;
 import com.yupi.web.exception.BusinessException;
 import com.yupi.web.manager.CosManager;
 import com.yupi.web.model.dto.file.UploadFileRequest;
@@ -40,6 +42,34 @@ public class FileController {
 
     @Resource
     private CosManager cosManager;
+
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @PostMapping("/test/upload")
+    public BaseResponse<String> testUploadFile(@RequestPart("file") MultipartFile multipartFile) {
+        String filename = multipartFile.getOriginalFilename();
+        String filepath = String.format("test/%s", filename);
+        File file = null;
+        try {
+            // 上传文件
+            file = File.createTempFile(filepath, null);
+            multipartFile.transferTo(file);
+            cosManager.putObject(filepath, file);
+            // 返回可访问地址
+            return ResultUtils.success(FileConstant.COS_HOST + filepath);
+        } catch (Exception e) {
+            log.error("file upload error, filepath = " + filepath, e);
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
+        } finally {
+            if (file != null) {
+                // 删除临时文件
+                boolean delete = file.delete();
+                if (!delete) {
+                    log.error("file delete error, filepath = {}", filepath);
+                }
+            }
+        }
+    }
+
 
     /**
      * 文件上传
