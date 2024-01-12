@@ -23,7 +23,6 @@ const PictureUploader: React.FC<Props> = (props) => {
     multiple: false,
     maxCount: 1,
     showUploadList: false,
-    disabled: loading,
     customRequest: async (fileObj: any) => {
       setLoading(true);
       try {
