@@ -1,9 +1,10 @@
 import {listGeneratorVoByPageUsingPost} from '@/services/backend/generatorController';
-import { UserOutlined } from '@ant-design/icons';
-import { PageContainer, ProFormSelect, ProFormText, QueryFilter } from '@ant-design/pro-components';
-import { Avatar, Card, Flex, Image, Input, List, message, Tabs, Tag, Typography } from 'antd';
+import {UserOutlined} from '@ant-design/icons';
+import {PageContainer, ProFormSelect, ProFormText, QueryFilter} from '@ant-design/pro-components';
+import {Avatar, Card, Flex, Image, Input, List, message, Tabs, Tag, Typography} from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {Link} from "@@/exports";
 
 /**
  * 默认分页参数
@@ -54,7 +55,7 @@ const IndexPage: React.FC = () => {
       return <></>;
     }
     return (
-      <div style={{ marginBottom: 8 }}>
+      <div style={{marginBottom: 8}}>
         {tags.map((tag) => (
           <Tag key={tag}> {tag}</Tag>
         ))}
@@ -84,7 +85,7 @@ const IndexPage: React.FC = () => {
           }}
         />
       </Flex>
-      <div style={{ marginBottom: 16 }} />
+      <div style={{marginBottom: 16}}/>
       {/* tags栏 */}
       <Tabs
         size={'large'}
@@ -99,7 +100,8 @@ const IndexPage: React.FC = () => {
             label: '推荐',
           },
         ]}
-        onChange={() => {}}
+        onChange={() => {
+        }}
       />
       {/*查询过滤器*/}
       <QueryFilter
@@ -107,8 +109,8 @@ const IndexPage: React.FC = () => {
         labelWidth="auto"
         labelAlign="left"
         defaultCollapsed={false}
-        style={{ padding: '16px 0' }}
-        onFinish={async (values:API.GeneratorQueryRequest) => {
+        style={{padding: '16px 0'}}
+        onFinish={async (values: API.GeneratorQueryRequest) => {
           setSearchParams({
             ...DEFAULT_PAGE,
             ...values,
@@ -116,11 +118,11 @@ const IndexPage: React.FC = () => {
           });
         }}
       >
-        <ProFormSelect name="tags" label="标签" mode={'tags'} />
-        <ProFormText name="name" label="名称" />
-        <ProFormText name="description" label="描述" />
+        <ProFormSelect name="tags" label="标签" mode={'tags'}/>
+        <ProFormText name="name" label="名称"/>
+        <ProFormText name="description" label="描述"/>
       </QueryFilter>
-      <div style={{ marginBottom: 24 }} />
+      <div style={{marginBottom: 24}}/>
 
       <List<API.GeneratorVO>
         rowKey="id"
@@ -149,27 +151,29 @@ const IndexPage: React.FC = () => {
         }}
         renderItem={(data) => (
           <List.Item>
-            <Card hoverable cover={<Image alt={data.name} src={data.picture} />}>
-              <Card.Meta
-                title={<a>{data.name}</a>}
-                description={
-                  <Typography.Paragraph ellipsis={{ rows: 2 }} style={{ height: 44 }}>
-                    {data.description}
-                  </Typography.Paragraph>
-                }
-              />
-              {tagListView(data.tags)}
-              <Flex justify="space-between" align="center">
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  {moment(data.createTime).fromNow()}
-                </Typography.Text>
-                <div>
-                  <Avatar src={data.user?.userAvatar ?? <UserOutlined />} />
-                </div>
-              </Flex>
-            </Card>
+              <Card hoverable cover={<Image alt={data.name} src={data.picture}/>}>
+                <Link to={`/generator/detail/${data.id}`}>
+                <Card.Meta
+                  title={<a>{data.name}</a>}
+                  description={
+                    <Typography.Paragraph ellipsis={{rows: 2}} style={{height: 44}}>
+                      {data.description}
+                    </Typography.Paragraph>
+                  }
+                />
+                {tagListView(data.tags)}
+                <Flex justify="space-between" align="center">
+                  <Typography.Text type="secondary" style={{fontSize: 12}}>
+                    {moment(data.createTime).fromNow()}
+                  </Typography.Text>
+                  <div>
+                    <Avatar src={data.user?.userAvatar ?? <UserOutlined/>}/>
+                  </div>
+                </Flex>
+                </Link>
+              </Card>
           </List.Item>
-        )}
+          )}
       />
     </PageContainer>
   );

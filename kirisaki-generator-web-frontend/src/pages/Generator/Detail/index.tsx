@@ -1,19 +1,25 @@
 import AuthorInfo from '@/pages/Generator/Detail/components/AuthorInfo';
 import FileConfig from '@/pages/Generator/Detail/components/FileConfig';
-
-import { getGeneratorVoByIdUsingGet } from '@/services/backend/generatorController';
-import { useParams } from '@@/exports';
-import { DownloadOutlined } from '@ant-design/icons';
+import ModelConfig from '@/pages/Generator/Detail/components/ModelConfig';
+import {
+  downloadGeneratorByIdUsingGet,
+  getGeneratorVoByIdUsingGet,
+} from '@/services/backend/generatorController';
+import { Link, useModel, useParams } from '@@/exports';
+import { DownloadOutlined, EditOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { Button, Card, Col, message, Row, Space, Tabs, Tag, Typography } from 'antd';
+import { saveAs } from 'file-saver';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import ModelConfig from "@/pages/Generator/Detail/components/ModelConfig";
 
-const GeneratorAddPage: React.FC = () => {
+const GeneratorDetailPage: React.FC = () => {
   const { id } = useParams();
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<API.GeneratorVO>({});
-  const [loading, setLoading] = useState<boolean>(true);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState ?? {};
+  const my = currentUser?.id === data?.userId;
 
   /**
    * 加载数据
@@ -38,7 +44,10 @@ const GeneratorAddPage: React.FC = () => {
       loadData();
     }
   }, [id]);
-
+  /**
+   * 标签列表视图
+   * @param tags
+   */
   const tagListView = (tags?: string[]) => {
     if (!tags) {
       return <></>;
@@ -51,8 +60,39 @@ const GeneratorAddPage: React.FC = () => {
       </div>
     );
   };
+  /**
+   * 下载按钮
+   */
+  const downloadBotton = data.distPath && currentUser && (
+    <Button
+      icon={<DownloadOutlined />}
+      onClick={async () => {
+        const blob = await downloadGeneratorByIdUsingGet(
+          {
+            id: data.id,
+          },
+          {
+            responseType: 'blob',
+          },
+        );
+        const fullPath = data.distPath || '';
+        // 前端通过fileSaver来处理流式数据
+        saveAs(blob, fullPath.substring(fullPath.lastIndexOf('/') + 1));
+      }}
+    >
+      下载
+    </Button>
+  );
+  /**
+   * 编辑按钮
+   */
+  const editBotton = my && (
+    <Link to={`/generator/updata?id=${data.id}`}>
+      <Button icon={<EditOutlined />}>编辑</Button>
+    </Link>
+  );
   return (
-    <PageContainer loading={loading}>
+    <PageContainer title={<></>} loading={loading}>
       <Card>
         <Row justify={'space-between'} gutter={[32, 32]}>
           <Col flex="auto">
@@ -62,7 +102,7 @@ const GeneratorAddPage: React.FC = () => {
             </Space>
             <Typography.Paragraph>{data.description}</Typography.Paragraph>
             <Typography.Paragraph type="secondary">
-              创建时间:{moment(data.createTime).format('YYYY-MM-DD HH:mm:ss')}
+              创建时间:{moment(data.createTime).format('YYYY-MM-DD hh:mm:ss')}
             </Typography.Paragraph>
             <Typography.Paragraph type="secondary">基础包:{data.basePackage}</Typography.Paragraph>
             <Typography.Paragraph type="secondary">版本:{data.version}</Typography.Paragraph>
@@ -70,7 +110,8 @@ const GeneratorAddPage: React.FC = () => {
             <div style={{ marginBottom: 24 }} />
             <Space size="middle">
               <Button type="primary">立即使用</Button>
-              <Button icon={<DownloadOutlined />}>下载</Button>
+              {downloadBotton}
+              {editBotton}
             </Space>
           </Col>
           <Col flex="320px">
@@ -106,4 +147,4 @@ const GeneratorAddPage: React.FC = () => {
     </PageContainer>
   );
 };
-export default GeneratorAddPage;
+export default GeneratorDetailPage;
