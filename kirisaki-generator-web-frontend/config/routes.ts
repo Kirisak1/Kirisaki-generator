@@ -19,6 +19,7 @@ export default [
     path: '/generator/add',
     icon: 'plus',
     component: './Generator/Add',
+    access:  'canUser',
     name: '创建生成器',
   },
   {

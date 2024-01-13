@@ -1,8 +1,7 @@
 import CreateModal from '@/pages/Admin/Generator/components/CreateModal';
 import UpdateModal from '@/pages/Admin/Generator/components/UpdateModal';
 import {
-  deleteGeneratorUsingPost,
-  listGeneratorVoByPageUsingPost
+  deleteGeneratorUsingPost, listGeneratorByPageUsingPost,
 } from '@/services/backend/generatorController';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
@@ -213,7 +212,7 @@ const GeneratorAdminPage: React.FC = () => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
 
-          const { data, code } = await listGeneratorVoByPageUsingPost({
+          const { data, code } = await listGeneratorByPageUsingPost({
             ...params,
             sortField,
             sortOrder,
